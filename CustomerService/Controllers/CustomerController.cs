@@ -33,7 +33,7 @@ namespace CustomerService.Controllers
             return "api works";
         }
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("Register")]
         public async Task<ActionResult> Register([FromBody] RegisterInput body)
         {
             try
