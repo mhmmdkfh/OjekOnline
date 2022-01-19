@@ -4,6 +4,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using DriverService.Dtos;
 
 namespace DriverService.Data
 {
@@ -14,7 +15,44 @@ namespace DriverService.Data
         {
             _db = db;
         }
-        public async Task Delete(string id)
+
+        public Task<Driver> Authenticate(string email, string password)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<Driver> Registration(Driver obj)
+        {
+            try
+            {
+                var drivers = await _db.Drivers.Where(d => d.NIK == obj.NIK).SingleOrDefaultAsync<Driver>();
+                if (drivers != null)
+                {
+                    throw new System.Exception("Driver all ready exist");
+                }
+                var newDriver = new Driver
+                {
+                    NIK = obj.NIK,
+                    FullName = obj.FullName,
+                    Email = obj.Email,
+                    Phone = obj.Phone,
+                    Password = BCrypt.Net.BCrypt.HashPassword(obj.Password),
+                    IsAccepted = false
+                };
+
+                _db.Drivers.Add(newDriver);
+                await _db.SaveChangesAsync();
+                return newDriver;
+
+            }
+            catch (System.Exception ex)
+            {
+                throw new System.Exception($"Error: {ex.Message}");
+            }
+        }
+
+
+        /*public async Task Delete(string id)
         {
             var result = await GetById(id);
             if (result == null) throw new Exception("Data tidak ditemukan !");
@@ -72,6 +110,6 @@ namespace DriverService.Data
             {
                 throw new Exception($"Error: {dbEx.Message}");
             }
-        }
+        }*/
     }
 }
