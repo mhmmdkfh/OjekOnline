@@ -20,13 +20,6 @@ namespace CustomerService.Controllers
         {
             _customer = customer;
         }
-        private readonly ILogger<CustomerController> _logger;
-
-        public CustomerController(ILogger<CustomerController> logger)
-        {
-            _logger = logger;
-        }
-
         [HttpGet]
         public String Get()
         {
@@ -36,6 +29,7 @@ namespace CustomerService.Controllers
         [HttpPost("Register")]
         public async Task<ActionResult> Register([FromBody] RegisterInput body)
         {
+            Console.WriteLine("halo");
             try
             {
                 await _customer.Register(body);
