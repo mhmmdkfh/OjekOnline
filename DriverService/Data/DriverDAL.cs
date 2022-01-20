@@ -5,20 +5,81 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DriverService.Dtos;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.Extensions.Options;
+using DriverService.Helpers;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace DriverService.Data
 {
     public class DriverDAL : IDriver
     {
         private readonly AppDbContext _db;
-        public DriverDAL(AppDbContext db)
+        private readonly IOptions<TokenSettings> _tokenSettings;
+
+        public DriverDAL(AppDbContext db, IOptions<TokenSettings> tokenSettings)
         {
             _db = db;
+            _tokenSettings = tokenSettings;
         }
 
-        public Task<Driver> Authenticate(string email, string password)
+        public async Task<DriverTokenDto> Login(string email, string password)
         {
-            throw new NotImplementedException();
+            var driver = await _db.Drivers.Where(x => x.Email == email).FirstOrDefaultAsync();
+            if (driver == null)
+            {
+                var msg = new DriverTokenDto
+                {
+                    Token = null,
+                    Expired = null,
+                    Message = "Username or password was invalid"
+                };
+                return msg;
+            }
+            bool valid = BCrypt.Net.BCrypt.Verify(password, driver.Password);
+            if(valid)
+            {
+                if(driver.IsAccepted == false)
+                {
+                    var result1 = new DriverTokenDto
+                    {
+                        Token = null,
+                        Expired = null,
+                        Message = "The account is not active, please contact the admin center"
+                    };
+                    return result1;
+                }
+                var securitykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_tokenSettings.Value.Key));
+                var credentials = new SigningCredentials(securitykey, SecurityAlgorithms.HmacSha256);
+
+                var claims = new List<Claim>();
+                claims.Add(new Claim(ClaimTypes.Email, driver.Email));
+
+                var expired = DateTime.Now.AddHours(3);
+                var jwtToken = new JwtSecurityToken(
+                    issuer: _tokenSettings.Value.Issuer,
+                    audience: _tokenSettings.Value.Audience,
+                    expires: expired,
+                    claims: claims,
+                    signingCredentials: credentials
+                );
+                var result = new DriverTokenDto
+                {
+                    Token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
+                    Expired = expired.ToString(),
+                    Message = null
+                };
+                return result;
+            }
+            var msg1 = new DriverTokenDto
+            {
+                Token = null,
+                Expired = null,
+                Message = "Username or password was invalid"
+            };
+            return msg1;
         }
 
         public async Task<Driver> Registration(Driver obj)

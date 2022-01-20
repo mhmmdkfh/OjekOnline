@@ -63,6 +63,13 @@ namespace DriverService.Controllers
             }
         }
 
+        [HttpPost("Login")]
+        public async Task<ActionResult<DriverTokenDto>> LoginDriver(LoginDriverDto login)
+        {
+            var driver = await _driver.Login(login.Email, login.Password);
+            return Ok(driver);
+        }
+
 
     }
 }
