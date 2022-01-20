@@ -1,4 +1,5 @@
-﻿using AdminService.Data.Interface;
+﻿using AdminService.Data.Database;
+using AdminService.Data.Interface;
 using AdminService.Models;
 using GeoCoordinatePortable;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ namespace AdminService.Data
         {
             _db = db;
         }
+
 
         // Driver
         public async Task<Driver> Approve(int id)
