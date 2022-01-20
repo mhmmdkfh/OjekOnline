@@ -1,11 +1,13 @@
-﻿using DriverService.Models;
+﻿using DriverService.Dtos;
+using DriverService.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace DriverService.Data
 {
-    public interface IDriver : ICrud<Driver>
+    public interface IDriver
     {
-        Task<IEnumerable<Driver>> GetByName(string name);
+        Task<Driver> Registration(Driver obj);
+        Task<DriverTokenDto> Login(string email, string password);
     }
 }
