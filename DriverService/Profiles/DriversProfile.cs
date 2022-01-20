@@ -10,6 +10,9 @@ namespace DriverService.Profiles
         {
             CreateMap<Driver, CreateDriverDto>();
             CreateMap<CreateDriverDto, Driver>();
+            CreateMap<Driver, DriverDto>();
+            CreateMap<DriverDto, Driver>();
+            CreateMap<Driver, WalletDriverDto>();
         }
     }
 }
