@@ -8,6 +8,6 @@ namespace DriverService.Data
     public interface IDriver
     {
         Task<Driver> Registration(Driver obj);
-        Task<Driver> Authenticate(string email, string password);
+        Task<DriverTokenDto> Login(string email, string password);
     }
 }
