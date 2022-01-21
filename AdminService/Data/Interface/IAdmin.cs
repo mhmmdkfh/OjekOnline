@@ -1,4 +1,5 @@
-﻿using AdminService.Models;
+﻿using AdminService.Data.Dto.Input;
+using AdminService.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -18,6 +19,6 @@ namespace AdminService.Data.Interface
         //Order
         Task<Rate> SetPrice(int inputPrice);
         Task<IEnumerable<Order>> GetAllTransaction();
-        Task<Order> GetPrice(Driver driver);
+        Task<Order> GetPrice(DriverInput driver);
     }
 }

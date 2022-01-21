@@ -1,4 +1,5 @@
 ﻿using AdminService.Data.Database;
+using AdminService.Data.Dto.Input;
 using AdminService.Data.Interface;
 using AdminService.Models;
 using GeoCoordinatePortable;
@@ -89,7 +90,7 @@ namespace AdminService.Data
             return price;
         }
 
-        public async Task<Order> GetPrice(Driver driver)
+        public async Task<Order> GetPrice(DriverInput driver)
         {
             var order = await _db.Orders.Where(o => o.Driver.Id == driver.Id && o.IsAccepted == true).FirstOrDefaultAsync();
             if (order == null)

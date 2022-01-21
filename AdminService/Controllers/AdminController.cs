@@ -1,8 +1,10 @@
 ﻿using AdminService.Data.Dto;
+using AdminService.Data.Dto.Input;
 using AdminService.Data.Interface;
 using AdminService.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -35,11 +37,11 @@ namespace AdminService.Controllers
 
         // PUT api/<AdminController>
         [HttpPut("Drivers/{id}")]
-        public async Task<ActionResult<Driver>> ApproveDriver(int id)
+        public async Task<ActionResult<Driver>> ApproveDriver(int id, [FromBody] bool input)
         {
             try
             {
-                var data = await _admin.Approve(id);
+                var data = await _admin.Approve(id, input);
                 return Ok(data);
             }
             catch (System.Exception ex)
@@ -51,11 +53,11 @@ namespace AdminService.Controllers
 
         // PUT api/<AdminController>/lock/Drivers/5
         [HttpPut("lock/Drivers/{Id}")]
-        public async Task<ActionResult<Driver>> LockDriver(int id)
+        public async Task<ActionResult<Driver>> LockDriver(int id, [FromBody] bool input)
         {
             try
             {
-                var data = await _admin.LockDriver(id);
+                var data = await _admin.LockDriver(id, input);
                 return Ok(data);
             }
             catch (System.Exception ex)
@@ -65,20 +67,20 @@ namespace AdminService.Controllers
         }
         // GET api/<AdminController>/Users
         [HttpGet("Users")]
-        public async Task<ActionResult<IEnumerable<UserData>>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<CustomerData>>> GetAllUsers()
         {
             var data = await _admin.GetUsers();
-            var users = _mapper.Map<UserData>(data);
+            var users = _mapper.Map<CustomerData>(data);
             return Ok(users);
         }
 
         // PUT api/<AdminController>/Users/3
         [HttpPut("Users/{id}")]
-        public async Task<ActionResult<Customer>> LockUser(Customer user)
+        public async Task<ActionResult<Customer>> LockUser(int id, [FromBody] bool input)
         {
             try
             {
-                var data = await _admin.LockUser(user.Id);
+                var data = await _admin.LockUser(id, input);
                 return Ok(data);
 
             }
@@ -98,6 +100,20 @@ namespace AdminService.Controllers
             return Ok(result);
         }
 
+        // PUT api/<AdminController>
+        [HttpPut]
+        public async Task<Order> GetPrice(DriverInput driver)
+        {
+            try
+            {
+                var setPrice = await _admin.GetPrice(driver);
+                return setPrice;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
 
+        }
     }
 }
