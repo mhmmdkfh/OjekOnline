@@ -16,7 +16,8 @@ namespace AdminService.Data.Interface
         Task<Customer> LockUser(int id, bool input);
 
         //Order
+        Task<Rate> SetPrice(int inputPrice);
         Task<IEnumerable<Order>> GetAllTransaction();
-        Task<Order> SetPrice(Driver driver);
+        Task<Order> GetPrice(Driver driver);
     }
 }
