@@ -21,14 +21,16 @@ namespace AdminService.Data
 
 
         // Driver
-        public async Task<Driver> Approve(int id)
+        public async Task<Driver> Approve(int id, bool input)
         {
             var driver = await _db.Drivers.Where(d => d.Id == id).FirstOrDefaultAsync();
             if (driver == null)
             {
                 throw new Exception($"Driver with no id {id} not found ");
             }
-            driver.IsAccepted = true;
+            driver.IsAccepted = input;
+            _db.Drivers.Update(driver);
+            await _db.SaveChangesAsync();
             return driver;
             
         }   
@@ -38,14 +40,16 @@ namespace AdminService.Data
             return drivers;
         }
 
-        public async Task<Driver> LockDriver(int id)
+        public async Task<Driver> LockDriver(int id, bool input)
         {
             var driver = await _db.Drivers.Where(d => d.Id == id).FirstOrDefaultAsync();
             if (driver == null)
             {
                 throw new Exception($"Driver with no id {id} not found ");
             }
-            driver.IsAccepted = false;
+            driver.IsAccepted = input;
+            _db.Drivers.Update(driver);
+            await _db.SaveChangesAsync();
             return driver;
         }
 
@@ -56,14 +60,16 @@ namespace AdminService.Data
             return customer;
         }
 
-        public async Task<Customer> LockUser(int id)
+        public async Task<Customer> LockUser(int id, bool input)
         {
             var user = await _db.Customers.Where(d => d.Id == id).FirstOrDefaultAsync();
             if (user == null)
             {
                 throw new Exception($"User with no id {user.Id} not found ");
             }
-            user.IsAccepted = false;
+            user.IsAccepted = input;
+            _db.Customers.Update(user);
+            await _db.SaveChangesAsync();
             return user;
         }
 
@@ -74,19 +80,33 @@ namespace AdminService.Data
             return transactions;
         }
 
-        public async Task<Order> SetPrice(Driver driver)
+        public async Task<Rate> SetPrice(int inputPrice)
+        {
+            var price = await _db.Rates.OrderBy(e => e.TravelFares).FirstOrDefaultAsync();
+            price.TravelFares = inputPrice;
+            _db.Rates.Update(price);
+            await _db.SaveChangesAsync();
+            return price;
+        }
+
+        public async Task<Order> GetPrice(Driver driver)
         {
             var order = await _db.Orders.Where(o => o.Driver.Id == driver.Id && o.IsAccepted == true).FirstOrDefaultAsync();
             if (order == null)
             {
                 throw new Exception("Order belum diterima driver");
             }
+
             var firstLoc = new GeoCoordinate(order.Lat, order.Long);
             var scdLoc = new GeoCoordinate(driver.Lat, driver.Long);
 
+
             var distance = firstLoc.GetDistanceTo(scdLoc) / 1000;
 
-            order.Price = Convert.ToInt32(distance * 10000);
+            var price = _db.Rates.OrderBy(e => e.TravelFares).FirstOrDefault();
+            order.Price = Convert.ToInt32(distance * Convert.ToDouble(price));
+            _db.Orders.Update(order);
+            await _db.SaveChangesAsync();
             return order;
         }
     }

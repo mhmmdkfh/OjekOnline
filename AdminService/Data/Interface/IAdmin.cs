@@ -8,12 +8,12 @@ namespace AdminService.Data.Interface
     {
         // Driver
         Task<IEnumerable<Driver>> GetDrivers();
-        Task<Driver> Approve(int id);
-        Task<Driver> LockDriver(int id);
+        Task<Driver> Approve(int id, bool input);
+        Task<Driver> LockDriver(int id, bool input);
 
         // User
         Task<IEnumerable<Customer>> GetUsers();
-        Task<Customer> LockUser(int id);
+        Task<Customer> LockUser(int id, bool input);
 
         //Order
         Task<IEnumerable<Order>> GetAllTransaction();
