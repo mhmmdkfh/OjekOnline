@@ -9,7 +9,7 @@ namespace AdminService.Data.Interface
     {
         // Driver
         Task<IEnumerable<Driver>> GetDrivers();
-        Task<Driver> Approve(int id, bool input);
+        Task<Driver> Approve(int id);
         Task<Driver> LockDriver(int id, bool input);
 
         // User

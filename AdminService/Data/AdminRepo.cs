@@ -22,14 +22,14 @@ namespace AdminService.Data
 
 
         // Driver
-        public async Task<Driver> Approve(int id, bool input)
+        public async Task<Driver> Approve(int id)
         {
             var driver = await _db.Drivers.Where(d => d.Id == id).FirstOrDefaultAsync();
             if (driver == null)
             {
                 throw new Exception($"Driver with no id {id} not found ");
             }
-            driver.IsAccepted = input;
+            driver.IsAccepted = true;
             _db.Drivers.Update(driver);
             await _db.SaveChangesAsync();
             return driver;
