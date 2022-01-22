@@ -4,7 +4,6 @@ using AdminService.Data.Interface;
 using AdminService.Models;
 using AdminService.Synchronous.http;
 using AutoMapper;
-using CustomerService.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
@@ -45,7 +44,7 @@ namespace AdminService.Controllers
                 Console.WriteLine("--> Sync Get to CustomerService was OK !");
                 var driverJsonString = await response.Content.ReadAsStringAsync();
                 Console.WriteLine("Your response data is: " + driverJsonString);
-                var deserialized = JsonConvert.DeserializeObject<IEnumerable<Driver>>(custome‌​rJsonString);
+                var deserialized = JsonConvert.DeserializeObject<IEnumerable<Driver>>(driverJsonString);
 
                 var data = _mapper.Map<CustomerData>(deserialized);
                 return Ok(data);
@@ -62,32 +61,16 @@ namespace AdminService.Controllers
         [HttpPut("Drivers/{id}")]
         public async Task<ActionResult<Driver>> ApproveDriver(int id)
         {
-            try
-            {
-                var data = await _admin.Approve(id, input);
-                return Ok(data);
-            }
-            catch (System.Exception ex)
-            {
 
-                return BadRequest(new { ex.Message });
-            }
         }
 
         // PUT api/<AdminController>/lock/Drivers/5
         [HttpPut("lock/Drivers/{Id}")]
         public async Task<ActionResult<Driver>> LockDriver(int id, [FromBody] bool input)
         {
-            try
-            {
-                var data = await _admin.LockDriver(id, input);
-                return Ok(data);
-            }
-            catch (System.Exception ex)
-            {
-                return BadRequest(new { ex.Message });
-            }
+
         }
+
         // GET api/<AdminController>/Users
         [HttpGet("Users")]
         public async Task<ActionResult<IEnumerable<CustomerData>>> GetAllUsers()
@@ -114,17 +97,7 @@ namespace AdminService.Controllers
         [HttpPut("Users/{id}")]
         public async Task<ActionResult<Customer>> LockUser(int id, [FromBody] bool input)
         {
-            try
-            {
-                var data = await _admin.LockUser(id, input);
-                return Ok(data);
 
-            }
-            catch (System.Exception ex)
-            {
-
-                return BadRequest(new { ex.Message });
-            }
         }
 
         // GET api/<AdminController>/Orders

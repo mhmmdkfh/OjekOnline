@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace DriverService.Models
+namespace AdminService.Models
 {
     public class Driver
     {
