@@ -104,9 +104,7 @@ namespace AdminService.Controllers
         [HttpGet("Orders")]
         public async Task<ActionResult<IEnumerable<OrderData>>> GetAllTransactions()
         {
-            var data = await _admin.GetAllTransaction();
-            var result = _mapper.Map<OrderData>(data);
-            return Ok(result);
+
         }
 
         // PUT api/<AdminController>

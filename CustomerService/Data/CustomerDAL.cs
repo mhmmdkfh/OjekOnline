@@ -57,7 +57,8 @@ namespace CustomerService.Data
                     Username = user.Username,
                     Email = user.Email,
                     Password = BCrypt.Net.BCrypt.HashPassword(user.Password),
-                    Saldo = 0
+                    Saldo = 0,
+                    IsActive = false,
                 };
                 var result = await Insert(newCustomer);
             }
@@ -109,7 +110,7 @@ namespace CustomerService.Data
             return msg1;
         }
 
-        public async Task<IEnumerable<Customer>> GetAllCustomer()
+        public async Task<IEnumerable<Customer>> GetAll()
         {
             var customers = await _db.Customers.OrderBy(e => e.Username).ToListAsync();
             return customers;
@@ -163,5 +164,6 @@ namespace CustomerService.Data
             var response = await _order.GetByCustomer(int.Parse(CustomerId));
             return response;
         }
+
     }
 }
