@@ -8,5 +8,6 @@ namespace CustomerService.Data
     public interface ICustomer
     {
         Task Register(RegisterInput body);
+        Task<LoginResponse> Login(LoginInput body);
     }
 }

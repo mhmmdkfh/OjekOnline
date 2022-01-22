@@ -42,9 +42,9 @@ namespace DriverService.Data
                 return msg;
             }
             bool valid = BCrypt.Net.BCrypt.Verify(password, driver.Password);
-            if(valid)
+            if (valid)
             {
-                if(driver.IsAccepted == false)
+                if (driver.IsAccepted == false)
                 {
                     var result1 = new DriverTokenDto
                     {
@@ -72,7 +72,7 @@ namespace DriverService.Data
                 {
                     Token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
                     Expired = expired.ToString(),
-                    Message = null
+                    Message = "success"
                 };
                 return result;
             }

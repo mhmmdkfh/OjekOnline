@@ -42,15 +42,18 @@ namespace CustomerService.Controllers
         }
         [AllowAnonymous]
         [HttpPost("Login")]
-        public async Task<ActionResult> Login([FromBody] LoginInput body)
+        public async Task<ActionResult<LoginResponse>> Login([FromBody] LoginInput body)
         {
             try
             {
-                // await _customer.Register(body);
-                return Ok($"Masih dummy ges.");
+                Console.WriteLine(body.Username);
+                Console.WriteLine(body.Password);
+                var res = await _customer.Login(body);
+                return Ok(res);
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return BadRequest(ex.Message);
             }
         }
