@@ -1,12 +1,18 @@
 ﻿using AdminService.Data.Database;
+using AdminService.Data.Dto;
 using AdminService.Data.Dto.Input;
 using AdminService.Data.Interface;
 using AdminService.Models;
 using GeoCoordinatePortable;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace AdminService.Data
@@ -14,73 +20,62 @@ namespace AdminService.Data
     public class AdminRepo : IAdmin
     {
         private AppDbContext _db;
+        private IOptions<TokenSettings> _token;
 
-        public AdminRepo(AppDbContext db)
+        public AdminRepo(AppDbContext db, IOptions<TokenSettings> token)
         {
             _db = db;
+            _token = token;
         }
 
-
-        // Driver
-        public async Task<Driver> Approve(int id)
+        public async Task<Admin> RegisterAdmin(CreateAdmin create)
         {
-            var driver = await _db.Drivers.Where(d => d.Id == id).FirstOrDefaultAsync();
-            if (driver == null)
+            try
             {
-                throw new Exception($"Driver with no id {id} not found ");
+                var newAdmin = new Admin
+                {
+                    FullName = create.FullName,
+                    Email = create.Email,
+                    Password = BCrypt.Net.BCrypt.HashPassword(create.Password)
+                };
+                _db.Admins.Add(newAdmin);
+                await _db.SaveChangesAsync();
+                return newAdmin;
             }
-            driver.IsAccepted = true;
-            _db.Drivers.Update(driver);
-            await _db.SaveChangesAsync();
-            return driver;
-        }   
-        public async Task<IEnumerable<Driver>> GetDrivers()
-        {
-            var drivers = await _db.Drivers.OrderBy(d => d.Id).ToListAsync();
-            return drivers;
-        }
-
-        public async Task<Driver> LockDriver(int id, bool input)
-        {
-            var driver = await _db.Drivers.Where(d => d.Id == id).FirstOrDefaultAsync();
-            if (driver == null)
+            catch (Exception ex)
             {
-                throw new Exception($"Driver with no id {id} not found ");
+
+                throw new Exception(ex.Message);
             }
-            driver.IsAccepted = input;
-            _db.Drivers.Update(driver);
-            await _db.SaveChangesAsync();
-            return driver;
         }
 
-        // User
-        public async Task<IEnumerable<Customer>> GetUsers()
+        public async Task<TokenUser> Login(LoginInput input)
         {
-            var customer = await _db.Customers.OrderBy(u => u.Id).ToListAsync();
-            return customer;
-        }
-
-        public async Task<Customer> LockUser(int id, bool input)
-        {
-            var user = await _db.Customers.Where(d => d.Id == id).FirstOrDefaultAsync();
-            if (user == null)
+            var user = await _db.Admins.Where(x => x.Email == input.Email).FirstOrDefaultAsync();
+            var valid = BCrypt.Net.BCrypt.Verify(input.Password, user.Password);
+            if (user == null && !valid)
             {
-                throw new Exception($"User with no id {user.Id} not found ");
+                throw new Exception("Email atau password salah");
             }
-            user.IsAccepted = input;
-            _db.Customers.Update(user);
-            await _db.SaveChangesAsync();
-            return user;
+            var claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.Email, user.Email));
+
+            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_token.Value.Key));
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+            var expired = DateTime.Now.AddHours(3);
+            var token = new JwtSecurityToken(
+                issuer: _token.Value.Issuer,
+                audience: _token.Value.Audience,
+                expires: expired,
+                signingCredentials: credentials
+            );
+            return await Task.FromResult(new TokenUser
+            {
+                Token = new JwtSecurityTokenHandler().WriteToken(token),
+            });
         }
 
-        // Order
-        public async Task<IEnumerable<Order>> GetAllTransaction()
-        {
-            var transactions = await _db.Orders.Where(t => t.IsAccepted == true && t.IsFinished == true).ToListAsync();
-            return transactions;
-        }
-
-        public async Task<Rate> SetPrice(int inputPrice)
+        public async Task<Rate> SetPrice(float inputPrice)
         {
             var price = await _db.Rates.OrderBy(e => e.TravelFares).FirstOrDefaultAsync();
             price.TravelFares = inputPrice;
@@ -89,25 +84,11 @@ namespace AdminService.Data
             return price;
         }
 
-        public async Task<Order> GetPrice(DriverInput driver)
+        public async Task<Rate> GetPrice()
         {
-            var order = await _db.Orders.Where(o => o.Driver.Id == driver.Id && o.IsAccepted == true).FirstOrDefaultAsync();
-            if (order == null)
-            {
-                throw new Exception("Order belum diterima driver");
-            }
-
-            var firstLoc = new GeoCoordinate(order.Lat, order.Long);
-            var scdLoc = new GeoCoordinate(driver.Lat, driver.Long);
-
-
-            var distance = firstLoc.GetDistanceTo(scdLoc) / 1000;
-
-            var price = _db.Rates.OrderBy(e => e.TravelFares).FirstOrDefault();
-            order.Price = Convert.ToInt32(distance * Convert.ToDouble(price));
-            _db.Orders.Update(order);
-            await _db.SaveChangesAsync();
-            return order;
+            var rate = await _db.Rates.OrderBy(e => e.TravelFares).FirstOrDefaultAsync();
+            return rate;
         }
+
     }
 }

@@ -6,6 +6,6 @@ namespace AdminService.Models
     {
         [Key]
         [Required]
-        public int TravelFares { get; set; }
+        public float TravelFares { get; set; }
     }
 }

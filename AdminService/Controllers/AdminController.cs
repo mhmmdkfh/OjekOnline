@@ -102,18 +102,10 @@ namespace AdminService.Controllers
 
         // PUT api/<AdminController>
         [HttpPut]
-        public async Task<Order> GetPrice(DriverInput driver)
+        public async Task<Rate> GetPrice()
         {
-            try
-            {
-                var setPrice = await _admin.GetPrice(driver);
-                return setPrice;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-
+            var setPrice = await _admin.GetPrice();
+            return setPrice;
         }
     }
 }
