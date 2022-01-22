@@ -22,7 +22,7 @@ namespace CustomerService.Controllers
         {
             _customer = customer;
         }
-        [HttpGet]
+        [HttpGet("test")]
         public String Get()
         {
             return "api works";
@@ -57,6 +57,22 @@ namespace CustomerService.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Customer>>> GetAll()
+        {
+            try
+            {
+                var data = _customer.GetAll();
+                return Ok(data);
+            }
+            catch (Exception)
+            {
+
+                return NotFound();
+            }
+        }
+
         [AllowAnonymous]
         [HttpPost("CheckOrderFee")]
         public async Task<ActionResult> CheckOrderFee([FromBody] CheckOrderFeeRequest request)

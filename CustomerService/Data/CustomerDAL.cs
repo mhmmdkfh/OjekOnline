@@ -108,6 +108,12 @@ namespace CustomerService.Data
             };
             return msg1;
         }
+
+        public async Task<IEnumerable<Customer>> GetAllCustomer()
+        {
+            var customers = await _db.Customers.OrderBy(e => e.Username).ToListAsync();
+            return customers;
+        }
         public async Task<CheckOrderFeeResponse> CheckOrderFee(CheckOrderFeeRequest request)
         {
             var rate = 10000;

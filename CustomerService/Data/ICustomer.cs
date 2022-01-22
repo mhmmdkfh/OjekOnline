@@ -10,6 +10,7 @@ namespace CustomerService.Data
     {
         Task Register(RegisterInput body);
         Task<LoginResponse> Login(LoginInput body);
+        Task<IEnumerable<Customer>> GetAll();
         Task<CheckOrderFeeResponse> CheckOrderFee(CheckOrderFeeRequest request);
         Task<TopUpResponse> TopUp(TopUpRequest request);
         Task<ViewSaldoResponse> ViewSaldo();
