@@ -46,8 +46,6 @@ namespace CustomerService.Controllers
         {
             try
             {
-                Console.WriteLine(body.Username);
-                Console.WriteLine(body.Password);
                 var res = await _customer.Login(body);
                 return Ok(res);
             }

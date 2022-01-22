@@ -79,7 +79,9 @@ namespace CustomerService.Data
                 var securitykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Secret));
                 var credentials = new SigningCredentials(securitykey, SecurityAlgorithms.HmacSha256);
                 var claims = new List<Claim>();
-                claims.Add(new Claim(ClaimTypes.Email, found.Email));
+                claims.Add(new Claim("username", found.Username));
+                claims.Add(new Claim("email", found.Email));
+                claims.Add(new Claim("role", "customer"));
                 var expired = DateTime.Now.AddHours(3);
                 var jwtToken = new JwtSecurityToken(
                     expires: expired,
