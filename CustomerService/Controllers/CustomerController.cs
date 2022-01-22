@@ -1,5 +1,6 @@
 using CustomerService.Data;
 using CustomerService.Dtos;
+using CustomerService.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -58,15 +59,16 @@ namespace CustomerService.Controllers
         }
         [AllowAnonymous]
         [HttpPost("CheckOrderFee")]
-        public async Task<ActionResult> CheckOrderFee([FromBody] LoginInput body)
+        public async Task<ActionResult> CheckOrderFee([FromBody] CheckOrderFeeRequest request)
         {
             try
             {
-                // await _customer.Register(body);
-                return Ok($"Masih dummy ges.");
+                var response = await _customer.CheckOrderFee(request);
+                return Ok(response);
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -81,6 +83,7 @@ namespace CustomerService.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return BadRequest(ex.Message);
             }
         }
@@ -109,20 +112,21 @@ namespace CustomerService.Controllers
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return BadRequest(ex.Message);
             }
         }
-        [AllowAnonymous]
-        [HttpPost("ViewOrderHistory")]
-        public async Task<ActionResult> ViewOrderHistory([FromBody] LoginInput body)
+        [HttpGet("ViewOrderHistory")]
+        public async Task<ActionResult<IEnumerable<Order>>> ViewOrderHistory()
         {
             try
             {
-                // await _customer.Register(body);
-                return Ok($"Masih dummy ges.");
+                var response = await _customer.ViewOrderHistory();
+                return Ok(response);
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return BadRequest(ex.Message);
             }
         }

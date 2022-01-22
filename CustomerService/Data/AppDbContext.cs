@@ -8,5 +8,6 @@ namespace CustomerService.Data
     {
         public AppDbContext(DbContextOptions options) : base(options){}
         public DbSet<Customer> Customers { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }

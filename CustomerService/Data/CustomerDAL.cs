@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CustomerService.Dtos;
 using CustomerService.Helpers;
 using CustomerService.Models;
+using Geolocation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -21,12 +22,16 @@ namespace CustomerService.Data
         private AppDbContext _db;
         private AppSettings _appSettings;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private IOrder _order;
 
-        public CustomerDAL(AppDbContext db, IOptions<AppSettings> appSettings, IHttpContextAccessor httpContextAccessor)
+        public CustomerDAL(AppDbContext db,
+        IOptions<AppSettings> appSettings,
+        IHttpContextAccessor httpContextAccessor)
         {
             _db = db;
             _appSettings = appSettings.Value;
             _httpContextAccessor = httpContextAccessor;
+            _order = new OrderDAL(db);
         }
 
         public async Task<Customer> Insert(Customer obj)
@@ -103,6 +108,21 @@ namespace CustomerService.Data
             };
             return msg1;
         }
+        public async Task<CheckOrderFeeResponse> CheckOrderFee(CheckOrderFeeRequest request)
+        {
+            var rate = 10000;
+            double distance = GeoCalculator.GetDistance(request.FromLat, request.FromLong, request.ToLat, request.ToLong, 1);
+            return new CheckOrderFeeResponse
+            {
+                FromLat = request.FromLat,
+                FromLong = request.FromLong,
+                ToLat = request.ToLat,
+                ToLong = request.ToLong,
+                Distance = distance,
+                Rate = rate,
+                Price = distance * rate
+            };
+        }
         public async Task<TopUpResponse> TopUp(TopUpRequest request)
         {
             var customerId = _httpContextAccessor.HttpContext.User.FindFirst("id").Value;
@@ -128,6 +148,13 @@ namespace CustomerService.Data
                 Username = found.Username,
                 Saldo = found.Saldo
             };
+            return response;
+        }
+        public async Task<IEnumerable<Order>> ViewOrderHistory()
+        {
+            var CustomerId = _httpContextAccessor.HttpContext.User.FindFirst("id").Value;
+            Console.WriteLine(CustomerId);
+            var response = await _order.GetByCustomer(int.Parse(CustomerId));
             return response;
         }
     }

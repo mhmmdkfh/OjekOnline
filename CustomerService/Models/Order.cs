@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace DriverService.Models
+namespace CustomerService.Models
 {
     public class Order
     {
