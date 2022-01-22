@@ -8,6 +8,7 @@ using CustomerService.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +50,7 @@ namespace CustomerService
                options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
             }
 
+
             // services.AddIdentity<IdentityUser, IdentityRole>(options =>
             // {
             //     options.Password.RequiredLength = 8;
@@ -78,7 +80,9 @@ namespace CustomerService
                     ValidateAudience = false
                 };
             });
+
             services.AddScoped<ICustomer, CustomerDAL>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             services.AddControllers();
@@ -121,7 +125,7 @@ namespace CustomerService
             app.UseHttpsRedirection();
 
             app.UseRouting();
-            app.UseAuthorization();
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 namespace CustomerService.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class CustomerController : ControllerBase
     {
@@ -83,28 +84,28 @@ namespace CustomerService.Controllers
                 return BadRequest(ex.Message);
             }
         }
-        [AllowAnonymous]
         [HttpPost("TopUp")]
-        public async Task<ActionResult> TopUp([FromBody] LoginInput body)
+        public async Task<ActionResult<TopUpResponse>> TopUp([FromBody] TopUpRequest request)
         {
             try
             {
-                // await _customer.Register(body);
-                return Ok($"Masih dummy ges.");
+
+                var response = await _customer.TopUp(request);
+                return Ok(response);
             }
             catch (Exception ex)
             {
+                Console.WriteLine(ex);
                 return BadRequest(ex.Message);
             }
         }
-        [AllowAnonymous]
-        [HttpPost("ViewSaldo")]
-        public async Task<ActionResult> ViewSaldo([FromBody] LoginInput body)
+        [HttpGet("ViewSaldo")]
+        public async Task<ActionResult<ViewSaldoResponse>> ViewSaldo()
         {
             try
             {
-                // await _customer.Register(body);
-                return Ok($"Masih dummy ges.");
+                var response = await _customer.ViewSaldo();
+                return Ok(response);
             }
             catch (Exception ex)
             {

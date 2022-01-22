@@ -9,5 +9,7 @@ namespace CustomerService.Data
     {
         Task Register(RegisterInput body);
         Task<LoginResponse> Login(LoginInput body);
+        Task<TopUpResponse> TopUp(TopUpRequest request);
+        Task<ViewSaldoResponse> ViewSaldo();
     }
 }

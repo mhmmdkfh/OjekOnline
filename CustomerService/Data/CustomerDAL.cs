@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CustomerService.Dtos;
 using CustomerService.Helpers;
 using CustomerService.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -19,12 +20,13 @@ namespace CustomerService.Data
     {
         private AppDbContext _db;
         private AppSettings _appSettings;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public CustomerDAL(AppDbContext db, IOptions<AppSettings> appSettings)
+        public CustomerDAL(AppDbContext db, IOptions<AppSettings> appSettings, IHttpContextAccessor httpContextAccessor)
         {
             _db = db;
-
             _appSettings = appSettings.Value;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<Customer> Insert(Customer obj)
@@ -72,13 +74,12 @@ namespace CustomerService.Data
                 return msg;
             }
             bool valid = BCrypt.Net.BCrypt.Verify(customer.Password, found.Password);
-            Console.WriteLine(valid);
-            Console.WriteLine(_appSettings.Secret);
             if (valid == true)
             {
                 var securitykey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_appSettings.Secret));
                 var credentials = new SigningCredentials(securitykey, SecurityAlgorithms.HmacSha256);
                 var claims = new List<Claim>();
+                claims.Add(new Claim("id", found.Id.ToString()));
                 claims.Add(new Claim("username", found.Username));
                 claims.Add(new Claim("email", found.Email));
                 claims.Add(new Claim("role", "customer"));
@@ -101,6 +102,33 @@ namespace CustomerService.Data
                 Message = "Username or password was invalid"
             };
             return msg1;
+        }
+        public async Task<TopUpResponse> TopUp(TopUpRequest request)
+        {
+            var customerId = _httpContextAccessor.HttpContext.User.FindFirst("id").Value;
+            Console.WriteLine(customerId);
+            var found = await _db.Customers.Where(it => it.Id == int.Parse(customerId)).FirstOrDefaultAsync();
+            found.Saldo = found.Saldo + request.Total;
+            await _db.SaveChangesAsync();
+            var response = new TopUpResponse
+            {
+                Username = found.Username,
+                Saldo = found.Saldo
+            };
+            return response;
+        }
+        public async Task<ViewSaldoResponse> ViewSaldo()
+        {
+            var customerId = _httpContextAccessor.HttpContext.User.FindFirst("id").Value;
+            Console.WriteLine(customerId);
+            var found = await _db.Customers.Where(it => it.Id == int.Parse(customerId)).FirstOrDefaultAsync();
+            await _db.SaveChangesAsync();
+            var response = new ViewSaldoResponse
+            {
+                Username = found.Username,
+                Saldo = found.Saldo
+            };
+            return response;
         }
     }
 }
