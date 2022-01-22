@@ -1,5 +1,8 @@
-﻿using DriverService.Data;
+﻿using AutoMapper;
+using DriverService.Data;
+using DriverService.Dtos;
 using DriverService.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -9,24 +12,27 @@ using System.Threading.Tasks;
 namespace DriverService.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class DriversController : ControllerBase
     {
+        private readonly IMapper _mapper;
         private readonly IDriver _driver;
 
-        public DriversController(IDriver driver)
+        public DriversController(IDriver driver, IMapper mapper)
         {
+            _mapper = mapper;
             _driver = driver;
         }
 
-        [HttpGet]
+        /*[HttpGet]
         public async Task<ActionResult<IEnumerable<Driver>>> Get()
         {
             var drivers = await _driver.GetAll();
             return Ok(drivers);
-        }
+        }*/
 
-        [HttpGet("{id}")]
+        /*[HttpGet("{id}")]
         public async Task<ActionResult<Driver>> Get(int id)
         {
             try
@@ -42,8 +48,67 @@ namespace DriverService.Controllers
 
                 return BadRequest(ex.Message);
             }
+        }*/
+        [AllowAnonymous]
+        [HttpPost]
+        public async Task<ActionResult<CreateDriverDto>> Registration(CreateDriverDto obj)
+        {
+            try
+            {
+                var driver = _mapper.Map<Driver>(obj);
+                var result = await _driver.Registration(driver);
+                return Ok($"Regristrasi driver {driver.FullName} berhasil dan menunggu admin mengaktifkan akun anda");
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
+        [AllowAnonymous]
+        [HttpPost("Login")]
+        public async Task<ActionResult<DriverTokenDto>> LoginDriver(LoginDriverDto login)
+        {
+            var driver = await _driver.Login(login.Email, login.Password);
+            return Ok(driver);
+        }
+
+        [HttpGet("Profile")]
+        public ActionResult<DriverDto> ViewProfile()
+        {
+            try
+            {
+                Console.WriteLine($"--> Getting Driver With Email/Username: {_driver.ViewProfile().Email}");
+                var driver = _driver.ViewProfile();
+                if (driver != null)
+                {
+                    return Ok(_mapper.Map<DriverDto>(driver));
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("Wallet")]
+        public ActionResult<WalletDriverDto> ViewWallet()
+        {
+            try
+            {
+                var driver = _driver.ViewWallet();
+                if (driver != null)
+                {
+                    return Ok(_mapper.Map<WalletDriverDto>(driver));
+                }
+                return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
 
     }
 }
