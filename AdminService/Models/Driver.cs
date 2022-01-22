@@ -28,5 +28,6 @@ namespace AdminService.Models
         public double Long { get; set; }
 
         public ICollection<Order> Orders { get; set; }
+
     }
 }

@@ -2,7 +2,7 @@
 
 namespace DriverService.Migrations
 {
-    public partial class InitialNewDb : Migration
+    public partial class InitalDb : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -12,10 +12,10 @@ namespace DriverService.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NIK = table.Column<int>(type: "int", maxLength: 100, nullable: false),
+                    NIK = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<int>(type: "int", maxLength: 25, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -29,11 +29,11 @@ namespace DriverService.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NIK = table.Column<int>(type: "int", maxLength: 100, nullable: false),
+                    NIK = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Wallet = table.Column<float>(type: "real", nullable: false),
-                    Phone = table.Column<int>(type: "int", maxLength: 25, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsAccepted = table.Column<bool>(type: "bit", nullable: false)
                 },
@@ -48,11 +48,11 @@ namespace DriverService.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NIK = table.Column<int>(type: "int", maxLength: 100, nullable: false),
+                    NIK = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Wallet = table.Column<float>(type: "real", nullable: false),
-                    Phone = table.Column<int>(type: "int", maxLength: 25, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsAccepted = table.Column<bool>(type: "bit", nullable: false),
                     Lat = table.Column<double>(type: "float", nullable: false),
@@ -67,12 +67,13 @@ namespace DriverService.Migrations
                 name: "Rates",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     TravelFares = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Rates", x => x.TravelFares);
+                    table.PrimaryKey("PK_Rates", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(

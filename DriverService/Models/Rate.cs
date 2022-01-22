@@ -6,6 +6,8 @@ namespace DriverService.Models
     {
         [Key]
         [Required]
+        public int Id { get; set; }
+        [Required]
         public int TravelFares { get; set; }
     }
 }

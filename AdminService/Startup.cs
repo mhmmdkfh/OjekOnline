@@ -1,4 +1,5 @@
 using AdminService.Data;
+using AdminService.Data.Database;
 using AdminService.Data.Interface;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

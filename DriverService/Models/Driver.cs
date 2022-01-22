@@ -10,7 +10,7 @@ namespace DriverService.Models
         public int Id { get; set; }
         [Required]
         [MaxLength(100)]
-        public int NIK { get; set; }
+        public string NIK { get; set; }
         [Required]
         public string FullName { get; set; }
         [Required]
@@ -18,7 +18,7 @@ namespace DriverService.Models
         public float Wallet { get; set; }
         [Required]
         [MaxLength(25)]
-        public int Phone { get; set; }
+        public string Phone { get; set; }
         [Required]
         public string Password { get; set; }
         [Required]

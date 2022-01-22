@@ -57,7 +57,7 @@ namespace DriverService.Controllers
             {
                 var driver = _mapper.Map<Driver>(obj);
                 var result = await _driver.Registration(driver);
-                return Ok($"Regristrasi driver {driver.FullName} berhasil dan menunggu admin mengaktifkan akun anda");
+                return Ok($"Driver registration {driver.FullName} is successful and waiting for admin to activate your account");
             }
             catch (System.Exception ex)
             {
@@ -78,7 +78,7 @@ namespace DriverService.Controllers
         {
             try
             {
-                Console.WriteLine($"--> Getting Driver With Email/Username: {_driver.ViewProfile().Email}");
+                Console.WriteLine($"--> Getting Driver Profile With Email/Username: {_driver.ViewProfile().Email}");
                 var driver = _driver.ViewProfile();
                 if (driver != null)
                 {
@@ -97,6 +97,7 @@ namespace DriverService.Controllers
         {
             try
             {
+                Console.WriteLine($"--> Getting Driver Wallet With Email/Username: {_driver.ViewProfile().Email}");
                 var driver = _driver.ViewWallet();
                 if (driver != null)
                 {

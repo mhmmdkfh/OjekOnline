@@ -41,7 +41,7 @@ namespace AdminService.Controllers
         {
             try
             {
-                var data = await _admin.Approve(id, input);
+                var data = await _admin.Approve(id);
                 return Ok(data);
             }
             catch (System.Exception ex)

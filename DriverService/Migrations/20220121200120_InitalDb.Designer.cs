@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DriverService.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220119060615_InitialNewDb")]
-    partial class InitialNewDb
+    [Migration("20220121200120_InitalDb")]
+    partial class InitalDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -35,17 +35,19 @@ namespace DriverService.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("NIK")
+                    b.Property<string>("NIK")
+                        .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Phone")
+                    b.Property<string>("Phone")
+                        .IsRequired()
                         .HasMaxLength(25)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(25)");
 
                     b.HasKey("Id");
 
@@ -70,17 +72,19 @@ namespace DriverService.Migrations
                     b.Property<bool>("IsAccepted")
                         .HasColumnType("bit");
 
-                    b.Property<int>("NIK")
+                    b.Property<string>("NIK")
+                        .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Phone")
+                    b.Property<string>("Phone")
+                        .IsRequired()
                         .HasMaxLength(25)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<float>("Wallet")
                         .HasColumnType("real");
@@ -114,17 +118,19 @@ namespace DriverService.Migrations
                     b.Property<double>("Long")
                         .HasColumnType("float");
 
-                    b.Property<int>("NIK")
+                    b.Property<string>("NIK")
+                        .IsRequired()
                         .HasMaxLength(100)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Phone")
+                    b.Property<string>("Phone")
+                        .IsRequired()
                         .HasMaxLength(25)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<float>("Wallet")
                         .HasColumnType("real");
@@ -173,12 +179,15 @@ namespace DriverService.Migrations
 
             modelBuilder.Entity("DriverService.Models.Rate", b =>
                 {
-                    b.Property<int>("TravelFares")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.HasKey("TravelFares");
+                    b.Property<int>("TravelFares")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
 
                     b.ToTable("Rates");
                 });

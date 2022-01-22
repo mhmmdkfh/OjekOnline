@@ -35,8 +35,6 @@ namespace DriverService.Data
             {
                 var msg = new DriverTokenDto
                 {
-                    Token = null,
-                    Expired = null,
                     Message = "Username or password was invalid"
                 };
                 return msg;
@@ -48,8 +46,6 @@ namespace DriverService.Data
                 {
                     var result1 = new DriverTokenDto
                     {
-                        Token = null,
-                        Expired = null,
                         Message = "The account is not active, please contact the admin center"
                     };
                     return result1;
@@ -78,8 +74,6 @@ namespace DriverService.Data
             }
             var msg1 = new DriverTokenDto
             {
-                Token = null,
-                Expired = null,
                 Message = "Username or password was invalid"
             };
             return msg1;
