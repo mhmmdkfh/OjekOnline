@@ -40,5 +40,89 @@ namespace CustomerService.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [AllowAnonymous]
+        [HttpPost("Login")]
+        public async Task<ActionResult> Login([FromBody] LoginInput body)
+        {
+            try
+            {
+                // await _customer.Register(body);
+                return Ok($"Masih dummy ges.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [AllowAnonymous]
+        [HttpPost("CheckOrderFee")]
+        public async Task<ActionResult> CheckOrderFee([FromBody] LoginInput body)
+        {
+            try
+            {
+                // await _customer.Register(body);
+                return Ok($"Masih dummy ges.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [AllowAnonymous]
+        [HttpPost("Order")]
+        public async Task<ActionResult> Order([FromBody] LoginInput body)
+        {
+            try
+            {
+                // await _customer.Register(body);
+                return Ok($"Masih dummy ges.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [AllowAnonymous]
+        [HttpPost("TopUp")]
+        public async Task<ActionResult> TopUp([FromBody] LoginInput body)
+        {
+            try
+            {
+                // await _customer.Register(body);
+                return Ok($"Masih dummy ges.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [AllowAnonymous]
+        [HttpPost("ViewSaldo")]
+        public async Task<ActionResult> ViewSaldo([FromBody] LoginInput body)
+        {
+            try
+            {
+                // await _customer.Register(body);
+                return Ok($"Masih dummy ges.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [AllowAnonymous]
+        [HttpPost("ViewOrderHistory")]
+        public async Task<ActionResult> ViewOrderHistory([FromBody] LoginInput body)
+        {
+            try
+            {
+                // await _customer.Register(body);
+                return Ok($"Masih dummy ges.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -49,14 +49,14 @@ namespace CustomerService
                options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
             }
 
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
-            {
-                options.Password.RequiredLength = 8;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequireNonAlphanumeric = true;
-                options.Password.RequireDigit = true;
-            }).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
+            // services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            // {
+            //     options.Password.RequiredLength = 8;
+            //     options.Password.RequireLowercase = true;
+            //     options.Password.RequireUppercase = true;
+            //     options.Password.RequireNonAlphanumeric = true;
+            //     options.Password.RequireDigit = true;
+            // }).AddDefaultTokenProviders().AddEntityFrameworkStores<AppDbContext>();
 
             var appSettingSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingSection);

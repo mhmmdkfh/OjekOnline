@@ -15,6 +15,12 @@ namespace CustomerService.Data
 {
     public class CustomerDAL : ICustomer
     {
+        private AppDbContext _db;
+
+        public CustomerDAL(AppDbContext db)
+        {
+            _db = db;
+        }
         private UserManager<IdentityUser> _userManager;
         private RoleManager<IdentityRole> _roleManager;
         private AppSettings _appSettings;
@@ -58,26 +64,35 @@ namespace CustomerService.Data
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            user.Token = tokenHandler.WriteToken(token);
+            // user.Token = tokenHandler.WriteToken(token);
             return user;
+        }
+        public async Task<Customer> Insert(Customer obj)
+        {
+            try
+            {
+                _db.Customers.Add(obj);
+                await _db.SaveChangesAsync();
+                return obj;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+
         }
         public async Task Register(RegisterInput user)
         {
             try
             {
-                var newUser = new IdentityUser { UserName = user.Username, Email = user.Email };
-                var result = await _userManager.CreateAsync(newUser, user.Password);
-
-                if (!result.Succeeded)
+                var newCustomer = new Customer
                 {
-                    StringBuilder errMsg = new StringBuilder(String.Empty);
-                    foreach (var err in result.Errors)
-                    {
-                        errMsg.Append(err.Description + " ");
-                    }
-                    throw new Exception($"{errMsg}");
-                }
-
+                    Username = user.Username,
+                    Email = user.Email,
+                    Password = user.Password,
+                    Saldo = 0
+                };
+                var result = await Insert(newCustomer);
             }
             catch (Exception ex)
             {
