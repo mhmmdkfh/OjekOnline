@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using CustomerService.Models;
+using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -17,12 +21,25 @@ namespace AdminService.Synchronous.http
         }
         public async Task GetDataDriversToAdmin()
         {
-            var response = await _http.GetAsync();
+            throw new System.NotImplementedException();
         }
 
-        public Task GetDataUsersToAdmin()
+        public async Task<IEnumerable<Customer>> GetDataUsersToAdmin()
         {
-            throw new System.NotImplementedException();
+            var response = _http.GetAsync(_config["CustomerService"]).Result;
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("--> Sync POST to CustomerService was OK !");
+                var customerJsonString = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Your response data is: " + customerJsonString);
+                var deserialized = JsonConvert.DeserializeObject<IEnumerable<Customer>>(custome‌​rJsonString);
+                return deserialized;
+            }
+            else
+            {
+                Console.WriteLine("--> Sync POST to CustomerService failed");
+                return null;
+            }
         }
 
         public Task LockDriver()

@@ -25,12 +25,12 @@ namespace DriverService.Controllers
             _driver = driver;
         }
 
-        /*[HttpGet]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Driver>>> Get()
         {
             var drivers = await _driver.GetAll();
             return Ok(drivers);
-        }*/
+        }
 
         /*[HttpGet("{id}")]
         public async Task<ActionResult<Driver>> Get(int id)

@@ -1,7 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace CustomerService.Models
+namespace AdminService.Models
 {
     public class Customer
     {

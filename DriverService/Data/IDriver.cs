@@ -9,6 +9,7 @@ namespace DriverService.Data
     {
         Task<Driver> Registration(Driver obj);
         Task<DriverTokenDto> Login(string email, string password);
+        Task<IEnumerable<Driver>> GetAll();
         Driver ViewProfile();
         Driver ViewWallet();
     }

@@ -2,6 +2,7 @@ using AdminService.Data;
 using AdminService.Data.Database;
 using AdminService.Data.Interface;
 using AdminService.Models;
+using AdminService.Synchronous.http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -53,6 +54,7 @@ namespace AdminService
 
 
             services.AddScoped<IAdmin, AdminRepo>();
+            services.AddHttpClient<IAdminDataClient, HttpAdminDataClient>();
             
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

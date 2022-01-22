@@ -114,6 +114,11 @@ namespace DriverService.Data
                 throw new System.Exception($"Error: {ex.Message}");
             }
         }
+        public async Task<IEnumerable<Driver>> GetAll()
+        {
+            var results = await (from d in _db.Drivers orderby d.FullName ascending select d).ToListAsync();
+            return results;
+        }
 
         public Driver ViewProfile()
         {
