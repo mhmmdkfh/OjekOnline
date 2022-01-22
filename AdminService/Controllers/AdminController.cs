@@ -37,7 +37,7 @@ namespace AdminService.Controllers
 
         // PUT api/<AdminController>
         [HttpPut("Drivers/{id}")]
-        public async Task<ActionResult<Driver>> ApproveDriver(int id, [FromBody] bool input)
+        public async Task<ActionResult<Driver>> ApproveDriver(int id)
         {
             try
             {
