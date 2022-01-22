@@ -33,7 +33,6 @@ namespace AdminService.Data
             _db.Drivers.Update(driver);
             await _db.SaveChangesAsync();
             return driver;
-            
         }   
         public async Task<IEnumerable<Driver>> GetDrivers()
         {
