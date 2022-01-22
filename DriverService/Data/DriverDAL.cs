@@ -11,6 +11,7 @@ using Microsoft.Extensions.Options;
 using DriverService.Helpers;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace DriverService.Data
 {
@@ -18,11 +19,13 @@ namespace DriverService.Data
     {
         private readonly AppDbContext _db;
         private readonly IOptions<TokenSettings> _tokenSettings;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public DriverDAL(AppDbContext db, IOptions<TokenSettings> tokenSettings)
+        public DriverDAL(AppDbContext db, IOptions<TokenSettings> tokenSettings, IHttpContextAccessor httpContextAccessor)
         {
             _db = db;
             _tokenSettings = tokenSettings;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<DriverTokenDto> Login(string email, string password)
@@ -39,9 +42,9 @@ namespace DriverService.Data
                 return msg;
             }
             bool valid = BCrypt.Net.BCrypt.Verify(password, driver.Password);
-            if(valid)
+            if (valid)
             {
-                if(driver.IsAccepted == false)
+                if (driver.IsAccepted == false)
                 {
                     var result1 = new DriverTokenDto
                     {
@@ -69,7 +72,7 @@ namespace DriverService.Data
                 {
                     Token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
                     Expired = expired.ToString(),
-                    Message = null
+                    Message = "success"
                 };
                 return result;
             }
@@ -110,6 +113,18 @@ namespace DriverService.Data
             {
                 throw new System.Exception($"Error: {ex.Message}");
             }
+        }
+
+        public Driver ViewProfile()
+        {
+            var driverEmail = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
+            return _db.Drivers.FirstOrDefault(d => d.Email == driverEmail);
+        }
+
+        public Driver ViewWallet()
+        {
+            var driverWallet = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
+            return _db.Drivers.FirstOrDefault(d => d.Email == driverWallet);
         }
 
 

@@ -38,6 +38,17 @@ namespace CustomerService.Migrations
                          .HasMaxLength(100)
                          .HasColumnType("nvarchar(100)");
 
+                    //  b.Property<string>("Email")
+                    //  .IsRequired()
+                    //  .HasMaxLength(100)
+                    //  .HasColumnType("nvarchar(100)");
+
+                    //  b.Property<string>("Email")
+                    //      .IsRequired()
+                    //      .HasMaxLength(100)
+                    //      .HasColumnType("nvarchar(100)");
+
+
                      b.HasKey("Id");
 
                      b.ToTable("Customers");

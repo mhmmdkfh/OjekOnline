@@ -9,5 +9,7 @@ namespace DriverService.Data
     {
         Task<Driver> Registration(Driver obj);
         Task<DriverTokenDto> Login(string email, string password);
+        Driver ViewProfile();
+        Driver ViewWallet();
     }
 }
