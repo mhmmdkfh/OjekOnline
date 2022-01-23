@@ -158,7 +158,7 @@ namespace AdminService.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpGet("Price")]
         public async Task<Rate> GetPrice()
         {
             var setPrice = await _admin.GetPrice();
