@@ -58,7 +58,7 @@ namespace CustomerService.Data
                     Email = user.Email,
                     Password = BCrypt.Net.BCrypt.HashPassword(user.Password),
                     Saldo = 0,
-                    IsActive = false,
+                    IsActive = true,
                 };
                 var result = await Insert(newCustomer);
             }
