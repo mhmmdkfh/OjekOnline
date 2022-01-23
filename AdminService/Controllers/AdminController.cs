@@ -164,5 +164,25 @@ namespace AdminService.Controllers
             var setPrice = await _admin.GetPrice();
             return setPrice;
         }
+
+        [HttpGet("Orders")]
+        public async Task<ActionResult<IEnumerable<OrderData>>> GetTransaction()
+        {
+            var response = _http.GetAsync(_config["CustomerService"] + "/orders").Result;
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("--> Sync Get to CustomerService was OK !");
+                var orderJsonString = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Your response data is: " + orderJsonString);
+                var deserialized = JsonSerializer.Deserialize<IEnumerable<OrderData>>(orderJsonString,
+                   new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+                return Ok(deserialized);
+            }
+            else
+            {
+                Console.WriteLine("--> Sync POST to CustomerService failed");
+                return NotFound();
+            }
+        }
     }
 }

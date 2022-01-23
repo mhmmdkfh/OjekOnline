@@ -82,6 +82,8 @@ namespace CustomerService
             });
 
             services.AddScoped<ICustomer, CustomerDAL>();
+            services.AddScoped<IOrder, OrderDAL>();
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
