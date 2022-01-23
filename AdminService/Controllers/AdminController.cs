@@ -1,7 +1,6 @@
 ﻿using AdminService.Data.Dto;
 using AdminService.Data.Dto.Input;
 using AdminService.Data.Interface;
-using AdminService.Dtos;
 using AdminService.Models;
 using AdminService.Synchronous.http;
 using AutoMapper;
@@ -89,20 +88,37 @@ namespace AdminService.Controllers
             }
         }
 
-
         // PUT api/<AdminController>
-      /*  [HttpPut("Drivers/{id}")]
-        public async Task<ActionResult<Driver>> ApproveDriver(int id)
+        [HttpPost("Drivers")]
+        public async Task<ActionResult> ApproveDriver([FromBody]LockDriverInput input)
         {
+            try
+            {
+                await _httpAdmin.SendApprove(input);
+                return Ok(new { Message = "Berhasil approve driver" });
 
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
         }
 
         // PUT api/<AdminController>/lock/Drivers/5
-        [HttpPut("lock/Drivers/{Id}")]
-        public async Task<ActionResult<Driver>> LockDriver(int id, [FromBody] bool input)
+        [HttpPost("lock/Drivers")]
+        public async Task<ActionResult> LockDriver([FromBody] LockDriverInput input)
         {
+            try
+            {
+                await _httpAdmin.SendLockDriver(input);
+                return Ok(new { Message = "Berhasil lock driver" });
+            }
+            catch (Exception ex)
+            {
 
-        } */
+                return BadRequest(new { ex.Message });
+            }
+        }
 
         // GET api/<AdminController>/Users
         [HttpGet("Users")]
@@ -128,7 +144,7 @@ namespace AdminService.Controllers
         }
 
         // PUT api/<AdminController>/Users/3
-        [HttpPut("lock/Users")]
+        [HttpPost("lock/Users")]
         public async Task<ActionResult> LockUser([FromBody]LockInput input)
         {
             try
@@ -142,14 +158,6 @@ namespace AdminService.Controllers
             }
         }
 
-        // GET api/<AdminController>/Orders
-      /*  [HttpGet("Orders")]
-        public async Task<ActionResult<IEnumerable<OrderData>>> GetAllTransactions()
-        {
-
-        } */
-
-        // PUT api/<AdminController>
         [HttpPut]
         public async Task<Rate> GetPrice()
         {

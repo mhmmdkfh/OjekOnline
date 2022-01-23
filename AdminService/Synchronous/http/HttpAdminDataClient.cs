@@ -1,4 +1,4 @@
-﻿using AdminService.Dtos;
+﻿using AdminService.Data.Dto.Input;
 using AdminService.Models;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -21,9 +21,34 @@ namespace AdminService.Synchronous.http
             _config = configuration;
         }
 
-        public Task LockDriver()
+        public async Task SendLockDriver(LockDriverInput input)
         {
-            throw new System.NotImplementedException();
+            var httpContent = new StringContent(JsonSerializer.Serialize(input),
+              Encoding.UTF8, "application/json");
+            var response = await _http.PutAsync(_config["CustomerService"] + "/lock", httpContent);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("--> Sync PUT to CustomerService was OK !");
+            }
+            else
+            {
+                Console.WriteLine("--> Sync PUT to CustomerService failed");
+            };
+        }
+
+        public async Task SendApprove(LockDriverInput input)
+        {
+            var httpContent = new StringContent(JsonSerializer.Serialize(input),
+                Encoding.UTF8, "application/json");
+            var response = await _http.PutAsync(_config["CustomerService"] + "/approve", httpContent);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("--> Sync PUT to CustomerService was OK !");
+            }
+            else
+            {
+                Console.WriteLine("--> Sync PUT to CustomerService failed");
+            }
         }
 
         public async Task SendLockUser(LockInput input)

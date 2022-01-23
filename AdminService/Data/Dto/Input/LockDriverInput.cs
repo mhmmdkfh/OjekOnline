@@ -1,8 +1,8 @@
 ﻿namespace AdminService.Data.Dto.Input
 {
-    public class LockInput
+    public class LockDriverInput
     {
         public int Id { get; set; }
-        public bool IsActive { get; set; }
+        public bool IsAccepted { get; set; }
     }
 }

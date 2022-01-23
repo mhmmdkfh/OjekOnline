@@ -59,7 +59,7 @@ namespace CustomerService.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetAll()
+        public async Task<ActionResult<IEnumerable<Customer>>> GetAllUser()
         {
             try
             {

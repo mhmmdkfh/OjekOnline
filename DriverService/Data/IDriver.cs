@@ -12,5 +12,7 @@ namespace DriverService.Data
         Task<IEnumerable<Driver>> GetAll();
         Driver ViewProfile();
         Driver ViewWallet();
+        Task<Driver> Approve(LockDriverInput input);
+        Task<Driver> Lock(LockDriverInput input);
     }
 }

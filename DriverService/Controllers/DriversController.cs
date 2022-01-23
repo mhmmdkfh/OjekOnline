@@ -110,5 +110,31 @@ namespace DriverService.Controllers
             }
         }
 
+        [HttpPut("Approve")]
+        public async Task<ActionResult> ApproveDriver(LockDriverInput input)
+        {
+            try
+            {
+                await _driver.Approve(input);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("Lock")]
+        public async Task<ActionResult> LockDriver(LockDriverInput input)
+        {
+            try
+            {
+                await _driver.Lock(input);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

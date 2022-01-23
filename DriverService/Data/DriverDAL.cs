@@ -132,6 +132,28 @@ namespace DriverService.Data
             return _db.Drivers.FirstOrDefault(d => d.Email == driverWallet);
         }
 
+        public async Task<Driver> Approve(LockDriverInput input)
+        {
+            var driver = await _db.Drivers.Where(d => d.Id == input.Id).FirstOrDefaultAsync();
+            if (driver != null)
+            {
+                driver.IsAccepted = input.IsAccepted;
+            }
+            _db.Drivers.Update(driver);
+            await _db.SaveChangesAsync();
+            return driver;
+        }
+        public async Task<Driver> Lock(LockDriverInput input)
+        {
+            var driver = await _db.Drivers.Where(d => d.Id == input.Id).FirstOrDefaultAsync();
+            if (driver != null)
+            {
+                driver.IsAccepted = input.IsAccepted;
+            }
+            _db.Drivers.Update(driver);
+            await _db.SaveChangesAsync();
+            return driver;
+        }
 
         /*public async Task Delete(string id)
         {
