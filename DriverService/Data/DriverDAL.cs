@@ -165,7 +165,7 @@ namespace DriverService.Data
             var driver = await _db.Drivers.Where(d => d.Id == input.Id).FirstOrDefaultAsync();
             if (driver != null)
             {
-                driver.IsActive = input.IsAIsActive;
+                driver.IsActive = input.IsActive;
             }
             _db.Drivers.Update(driver);
             await _db.SaveChangesAsync();
@@ -176,7 +176,7 @@ namespace DriverService.Data
             var driver = await _db.Drivers.Where(d => d.Id == input.Id).FirstOrDefaultAsync();
             if (driver != null)
             {
-                driver.IsActive = input.IsAIsActive;
+                driver.IsActive = input.IsActive;
             }
             _db.Drivers.Update(driver);
             await _db.SaveChangesAsync();

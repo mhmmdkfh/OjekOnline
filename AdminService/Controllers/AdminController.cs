@@ -4,6 +4,7 @@ using AdminService.Data.Interface;
 using AdminService.Models;
 using AdminService.Synchronous.http;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -19,6 +20,7 @@ namespace AdminService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AdminController : ControllerBase
     {
         private IAdmin _admin;
@@ -37,7 +39,8 @@ namespace AdminService.Controllers
             _httpAdmin = adminDataClient;
         }
 
-        [HttpPost]
+        [AllowAnonymous]
+        [HttpPost("Register")]
         public async Task<ActionResult> Register([FromBody] CreateAdmin create)
         {
             try
@@ -51,6 +54,7 @@ namespace AdminService.Controllers
                 return BadRequest(new { ex.Message });
             }
         }
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<ActionResult<TokenSettings>> Login([FromBody] LoginInput input)
         {
@@ -72,7 +76,7 @@ namespace AdminService.Controllers
             var response = _http.GetAsync(_config["DriverService"]).Result;
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("--> Sync Get to CustomerService was OK !");
+                Console.WriteLine("--> Sync Get to DriverService was OK !");
                 var driverJsonString = await response.Content.ReadAsStringAsync();
                 Console.WriteLine("Your response data is: " + driverJsonString);
                 var deserialized = JsonSerializer.Deserialize<IEnumerable<Driver>>(driverJsonString,
@@ -83,7 +87,7 @@ namespace AdminService.Controllers
             }
             else
             {
-                Console.WriteLine("--> Sync POST to CustomerService failed");
+                Console.WriteLine("--> Sync GET to DriverService failed");
                 return NotFound();
             }
         }
