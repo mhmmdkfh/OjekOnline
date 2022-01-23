@@ -54,7 +54,7 @@ namespace DriverService.Data
                 return msg;
             }
             bool valid = BCrypt.Net.BCrypt.Verify(password, driver.Password);
-            if(valid)
+            if (valid)
             {
                 if(driver.IsActive == false)
                 {
@@ -83,7 +83,7 @@ namespace DriverService.Data
                 {
                     Token = new JwtSecurityTokenHandler().WriteToken(jwtToken),
                     Expired = expired.ToString(),
-                    Message = null
+                    Message = "success"
                 };
                 return result;
             }
@@ -123,6 +123,11 @@ namespace DriverService.Data
                 throw new System.Exception($"Error: {ex.Message}");
             }
         }
+        public async Task<IEnumerable<Driver>> GetAll()
+        {
+            var results = await (from d in _db.Drivers orderby d.FullName ascending select d).ToListAsync();
+            return results;
+        }
 
         public async Task<Driver> SetLocation(Driver obj)
         {
@@ -142,7 +147,7 @@ namespace DriverService.Data
                 throw new Exception($"Error: {dbEx.Message}");
             }
         }
-
+        
         public Driver ViewProfile()
         {
             var driverEmail = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
@@ -153,6 +158,29 @@ namespace DriverService.Data
         {
             var driverWallet = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
             return _db.Drivers.FirstOrDefault(d => d.Email == driverWallet);
+        }
+
+        public async Task<Driver> Approve(LockDriverInput input)
+        {
+            var driver = await _db.Drivers.Where(d => d.Id == input.Id).FirstOrDefaultAsync();
+            if (driver != null)
+            {
+                driver.IsAccepted = input.IsAccepted;
+            }
+            _db.Drivers.Update(driver);
+            await _db.SaveChangesAsync();
+            return driver;
+        }
+        public async Task<Driver> Lock(LockDriverInput input)
+        {
+            var driver = await _db.Drivers.Where(d => d.Id == input.Id).FirstOrDefaultAsync();
+            if (driver != null)
+            {
+                driver.IsAccepted = input.IsAccepted;
+            }
+            _db.Drivers.Update(driver);
+            await _db.SaveChangesAsync();
+            return driver;
         }
 
 

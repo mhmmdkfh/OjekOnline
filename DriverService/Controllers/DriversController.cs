@@ -25,12 +25,12 @@ namespace DriverService.Controllers
             _driver = driver;
         }
 
-        /*[HttpGet]
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Driver>>> Get()
         {
             var drivers = await _driver.GetAll();
             return Ok(drivers);
-        }*/
+        }
 
         /*[HttpGet("{id}")]
         public async Task<ActionResult<Driver>> Get(int id)
@@ -78,7 +78,9 @@ namespace DriverService.Controllers
         {
             try
             {
-                Console.WriteLine($"--> Getting Driver Profile With Email/Username: {_driver.ViewProfile().Email}");
+
+                Console.WriteLine($"--> Getting Driver With Email/Username: {_driver.ViewProfile().Email}");
+
                 var driver = _driver.ViewProfile();
                 if (driver != null)
                 {
@@ -128,5 +130,31 @@ namespace DriverService.Controllers
             }
         }
 
+        [HttpPut("Approve")]
+        public async Task<ActionResult> ApproveDriver(LockDriverInput input)
+        {
+            try
+            {
+                await _driver.Approve(input);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+        [HttpPut("Lock")]
+        public async Task<ActionResult> LockDriver(LockDriverInput input)
+        {
+            try
+            {
+                await _driver.Lock(input);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

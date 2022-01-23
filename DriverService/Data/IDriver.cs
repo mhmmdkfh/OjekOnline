@@ -9,9 +9,12 @@ namespace DriverService.Data
     {
         Task<Driver> Registration(Driver obj);
         Task<DriverTokenDto> Login(string email, string password);
-        Task<Driver> SetLocation(Driver obj);
-        Task<Driver> GetById(string id);
+        Task<IEnumerable<Driver>> GetAll();
         Driver ViewProfile();
         Driver ViewWallet();
+        Task<Driver> Approve(LockDriverInput input);
+        Task<Driver> Lock(LockDriverInput input);
+        Task<Driver> SetLocation(Driver obj);
+        Task<Driver> GetById(string id);
     }
 }
