@@ -1,9 +1,10 @@
-﻿using CustomerService.Models;
+﻿using AdminService.Dtos;
+using AdminService.Models;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -19,37 +20,25 @@ namespace AdminService.Synchronous.http
             _http = http;
             _config = configuration;
         }
-        public async Task GetDataDriversToAdmin()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task<IEnumerable<Customer>> GetDataUsersToAdmin()
-        {
-            var response = _http.GetAsync(_config["CustomerService"]).Result;
-            if (response.IsSuccessStatusCode)
-            {
-                Console.WriteLine("--> Sync POST to CustomerService was OK !");
-                var customerJsonString = await response.Content.ReadAsStringAsync();
-                Console.WriteLine("Your response data is: " + customerJsonString);
-                var deserialized = JsonConvert.DeserializeObject<IEnumerable<Customer>>(custome‌​rJsonString);
-                return deserialized;
-            }
-            else
-            {
-                Console.WriteLine("--> Sync POST to CustomerService failed");
-                return null;
-            }
-        }
 
         public Task LockDriver()
         {
             throw new System.NotImplementedException();
         }
 
-        public Task LockUser()
+        public async Task SendLockUser(LockInput input)
         {
-            throw new System.NotImplementedException();
+            var httpContent = new StringContent(JsonSerializer.Serialize(input),
+                Encoding.UTF8, "application/json");
+            var response = await _http.PutAsync(_config["CustomerService"], httpContent);
+            if (response.IsSuccessStatusCode)
+            {
+                Console.WriteLine("--> Sync PUT to CustomerService was OK !");
+            }
+            else
+            {
+                Console.WriteLine("--> Sync PUT to CustomerService failed");
+            }
         }
     }
 }

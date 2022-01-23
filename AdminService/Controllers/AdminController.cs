@@ -1,6 +1,7 @@
 ﻿using AdminService.Data.Dto;
 using AdminService.Data.Dto.Input;
 using AdminService.Data.Interface;
+using AdminService.Dtos;
 using AdminService.Models;
 using AdminService.Synchronous.http;
 using AutoMapper;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -24,16 +26,17 @@ namespace AdminService.Controllers
         private IMapper _mapper;
         private HttpClient _http;
         private IConfiguration _config;
+        private IAdminDataClient _httpAdmin;
 
         public AdminController(IAdmin admin,
-            IMapper mapper, HttpClient http, IConfiguration configuration)
+            IMapper mapper, HttpClient http, IConfiguration configuration, IAdminDataClient adminDataClient)
         {
             _admin = admin;
             _mapper = mapper;
             _http = http;
             _config = configuration;
+            _httpAdmin = adminDataClient;
         }
-
 
         [HttpPost]
         public async Task<ActionResult> Register([FromBody] CreateAdmin create)
@@ -88,7 +91,7 @@ namespace AdminService.Controllers
 
 
         // PUT api/<AdminController>
-        [HttpPut("Drivers/{id}")]
+      /*  [HttpPut("Drivers/{id}")]
         public async Task<ActionResult<Driver>> ApproveDriver(int id)
         {
 
@@ -99,7 +102,7 @@ namespace AdminService.Controllers
         public async Task<ActionResult<Driver>> LockDriver(int id, [FromBody] bool input)
         {
 
-        }
+        } */
 
         // GET api/<AdminController>/Users
         [HttpGet("Users")]
@@ -126,17 +129,25 @@ namespace AdminService.Controllers
 
         // PUT api/<AdminController>/Users/3
         [HttpPut("lock/Users")]
-        public async Task<ActionResult<Customer>> LockUser([FromBody] bool input)
+        public async Task<ActionResult> LockUser([FromBody]LockInput input)
         {
-
+            try
+            {
+                await _httpAdmin.SendLockUser(input);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         // GET api/<AdminController>/Orders
-        [HttpGet("Orders")]
+      /*  [HttpGet("Orders")]
         public async Task<ActionResult<IEnumerable<OrderData>>> GetAllTransactions()
         {
 
-        }
+        } */
 
         // PUT api/<AdminController>
         [HttpPut]

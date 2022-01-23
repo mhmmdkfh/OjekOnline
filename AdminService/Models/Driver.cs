@@ -27,6 +27,5 @@ namespace AdminService.Models
         public double Lat { get; set; }
         public double Long { get; set; }
 
-        public ICollection<Order> Orders { get; set; }
     }
 }
