@@ -5,6 +5,7 @@ namespace CustomerService.Data
 {
     public interface IOrder
     {
+        Task<IEnumerable<Order>> GetAllOrders();
         Task<IEnumerable<Order>> GetByCustomer(int CustomerId);
     }
 }

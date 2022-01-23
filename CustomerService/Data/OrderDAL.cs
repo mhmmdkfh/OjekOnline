@@ -27,6 +27,20 @@ namespace CustomerService.Data
             _db = db;
         }
 
+        public async Task<IEnumerable<Order>> GetAllOrders()
+        {
+            try
+            {
+                var orders = await _db.Orders.Where(o => o.IsFinished == true).ToListAsync();
+                return orders;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<IEnumerable<Order>> GetByCustomer(int CustomerId)
         {
             try

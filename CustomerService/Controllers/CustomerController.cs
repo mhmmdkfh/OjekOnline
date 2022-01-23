@@ -17,10 +17,12 @@ namespace CustomerService.Controllers
     public class CustomerController : ControllerBase
     {
         private ICustomer _customer;
+        private IOrder _order;
 
-        public CustomerController(ICustomer customer)
+        public CustomerController(ICustomer customer, IOrder order)
         {
             _customer = customer;
+            _order = order;
         }
         [HttpGet("test")]
         public String Get()
