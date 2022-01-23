@@ -111,5 +111,22 @@ namespace DriverService.Controllers
             }
         }
 
+        [HttpPut("SetLocation")]
+        public async Task<ActionResult<SetLocationDriverDto>> SetLocation(SetLocationDriverDto setLocation)
+        {
+            try
+            {
+                var driver = _mapper.Map<Driver>(setLocation);
+                var result = await _driver.SetLocation(driver);
+                var driverdto = _mapper.Map<SetLocationDriverDto>(result);
+                return Ok(driverdto);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
     }
 }
