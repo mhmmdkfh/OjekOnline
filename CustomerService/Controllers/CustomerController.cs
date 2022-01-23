@@ -17,12 +17,10 @@ namespace CustomerService.Controllers
     public class CustomerController : ControllerBase
     {
         private ICustomer _customer;
-        private IOrder _order;
 
-        public CustomerController(ICustomer customer, IOrder order)
+        public CustomerController(ICustomer customer)
         {
             _customer = customer;
-            _order = order;
         }
         [HttpGet("test")]
         public String Get()
@@ -59,19 +57,19 @@ namespace CustomerService.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetAllUser()
         {
             try
             {
-                var data = _customer.GetAll();
+                var data = await _customer.GetAll();
                 return Ok(data);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                return NotFound();
+                return NotFound(ex.Message);
             }
         }
 
@@ -148,6 +146,7 @@ namespace CustomerService.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [AllowAnonymous]
         [HttpPut]
         public async Task<ActionResult<Customer>> Lock([FromBody] LockInput input)
         {

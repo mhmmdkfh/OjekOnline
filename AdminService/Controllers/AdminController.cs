@@ -78,7 +78,7 @@ namespace AdminService.Controllers
                 var deserialized = JsonSerializer.Deserialize<IEnumerable<Driver>>(driverJsonString,
                     new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
-                var data = _mapper.Map<CustomerData>(deserialized);
+                var data = _mapper.Map<IEnumerable<DriverData>>(deserialized);
                 return Ok(data);
             }
             else
@@ -133,12 +133,12 @@ namespace AdminService.Controllers
                 var deserialized = JsonSerializer.Deserialize<IEnumerable<Customer>>(customerJsonString,
                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
-                var data = _mapper.Map<CustomerData>(deserialized);
+                var data = _mapper.Map<IEnumerable<CustomerData>>(deserialized);
                 return Ok(data);
             }
             else
             {
-                Console.WriteLine("--> Sync POST to CustomerService failed");
+                Console.WriteLine("--> Sync Get to CustomerService failed");
                 return NotFound();
             }
         }
@@ -180,7 +180,7 @@ namespace AdminService.Controllers
             }
             else
             {
-                Console.WriteLine("--> Sync POST to CustomerService failed");
+                Console.WriteLine("--> Sync Get to CustomerService failed");
                 return NotFound();
             }
         }

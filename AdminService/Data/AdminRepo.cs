@@ -64,6 +64,7 @@ namespace AdminService.Data
             }
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Email, user.Email));
+            claims.Add(new Claim("role", "admin"));
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_token.Value.Key));
             var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);

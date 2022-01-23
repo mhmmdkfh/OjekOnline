@@ -47,7 +47,7 @@ namespace CustomerService
             {
                 Console.WriteLine("--> Using LocalDB");
                 services.AddDbContext<AppDbContext>(options =>
-               options.UseSqlServer(Configuration.GetConnectionString("LocalConnection")));
+               options.UseSqlServer(Configuration.GetConnectionString("LocalDb")));
             }
 
 
