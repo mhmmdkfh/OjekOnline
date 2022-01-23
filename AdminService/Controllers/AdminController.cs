@@ -6,10 +6,10 @@ using AdminService.Synchronous.http;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -73,7 +73,8 @@ namespace AdminService.Controllers
                 Console.WriteLine("--> Sync Get to CustomerService was OK !");
                 var driverJsonString = await response.Content.ReadAsStringAsync();
                 Console.WriteLine("Your response data is: " + driverJsonString);
-                var deserialized = JsonConvert.DeserializeObject<IEnumerable<Driver>>(driverJsonString);
+                var deserialized = JsonSerializer.Deserialize<IEnumerable<Driver>>(driverJsonString,
+                    new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 var data = _mapper.Map<CustomerData>(deserialized);
                 return Ok(data);
@@ -110,7 +111,8 @@ namespace AdminService.Controllers
                 Console.WriteLine("--> Sync Get to CustomerService was OK !");
                 var customerJsonString = await response.Content.ReadAsStringAsync();
                 Console.WriteLine("Your response data is: " + customerJsonString);
-                var deserialized = JsonConvert.DeserializeObject<IEnumerable<Customer>>(custome‌​rJsonString);
+                var deserialized = JsonSerializer.Deserialize<IEnumerable<Customer>>(customerJsonString,
+                   new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
 
                 var data = _mapper.Map<CustomerData>(deserialized);
                 return Ok(data);

@@ -165,5 +165,16 @@ namespace CustomerService.Data
             return response;
         }
 
+        public async Task<Customer> LockUser(LockInput input)
+        {
+            var customer = _db.Customers.Where(c => c.Id == input.Id).FirstOrDefault();
+            if (customer != null)
+            {
+                customer.IsActive = input.IsActive;
+            }
+            _db.Customers.Update(customer);
+            await _db.SaveChangesAsync();
+            return customer;
+        }
     }
 }

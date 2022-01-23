@@ -146,5 +146,18 @@ namespace CustomerService.Controllers
                 return BadRequest(ex.Message);
             }
         }
+        [HttpPut]
+        public async Task<ActionResult<Customer>> Lock([FromBody] LockInput input)
+        {
+            try
+            {
+                var response = await _customer.LockUser(input);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }
