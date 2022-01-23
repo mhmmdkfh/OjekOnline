@@ -123,8 +123,8 @@ namespace AdminService.Controllers
         }
 
         // PUT api/<AdminController>/Users/3
-        [HttpPut("Users/{id}")]
-        public async Task<ActionResult<Customer>> LockUser(int id, [FromBody] bool input)
+        [HttpPut("lock/Users")]
+        public async Task<ActionResult<Customer>> LockUser([FromBody] bool input)
         {
 
         }
