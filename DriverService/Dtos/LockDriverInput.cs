@@ -3,6 +3,6 @@
     public class LockDriverInput
     {
         public int Id { get; set; }
-        public bool IsAccepted { get; set; }
+        public bool IsAIsActive { get; set; }
     }
 }
