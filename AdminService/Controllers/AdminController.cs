@@ -34,6 +34,35 @@ namespace AdminService.Controllers
             _config = configuration;
         }
 
+
+        [HttpPost]
+        public async Task<ActionResult> Register([FromBody] CreateAdmin create)
+        {
+            try
+            {
+                var data = await _admin.RegisterAdmin(create);
+                return Ok(new { Message = "Register berhasil" });
+            }
+            catch (Exception ex)
+            {
+
+                return BadRequest(new { ex.Message });
+            }
+        }
+        [HttpPost("login")]
+        public async Task<ActionResult<TokenSettings>> Login([FromBody] LoginInput input)
+        {
+            try
+            {
+                var user = await _admin.Login(input);
+                return Ok(user);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { ex.Message });
+            }
+        }
+
         // GET: api/<AdminController>/Drivers
         [HttpGet("Drivers")]
         public async Task<ActionResult<IEnumerable<DriverData>>> GetAllDrivers()

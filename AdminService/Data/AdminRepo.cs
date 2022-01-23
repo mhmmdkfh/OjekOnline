@@ -32,6 +32,11 @@ namespace AdminService.Data
         {
             try
             {
+                var valid = await _db.Admins.Where(e=> e.Email == create.Email).FirstOrDefaultAsync();
+                if (valid != null)
+                {
+                    throw new Exception("Email sudah terdaftar");
+                }
                 var newAdmin = new Admin
                 {
                     FullName = create.FullName,
