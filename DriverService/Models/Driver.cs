@@ -8,9 +8,7 @@ namespace DriverService.Models
         [Key]
         [Required]
         public int Id { get; set; }
-        [Required]
-        [MaxLength(100)]
-        public int NIK { get; set; }
+        public string Username { get; set; }
         [Required]
         public string FullName { get; set; }
         [Required]
@@ -18,15 +16,13 @@ namespace DriverService.Models
         public float Wallet { get; set; }
         [Required]
         [MaxLength(25)]
-        public int Phone { get; set; }
+        public string Phone { get; set; }
         [Required]
         public string Password { get; set; }
         [Required]
-        public bool IsAccepted { get; set; }
+        public bool IsActive { get; set; }
         // Set Position Driver
         public double Lat { get; set; }
         public double Long { get; set; }
-
-        public ICollection<Order> Orders { get; set; }
     }
 }

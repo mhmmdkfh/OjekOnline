@@ -2,6 +2,7 @@
 {
     public class WalletDriverDto
     {
+        public string Username { get; set; }
         public string Email { get; set; }
         public float Wallet { get; set; }
     }

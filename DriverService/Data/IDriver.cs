@@ -14,5 +14,7 @@ namespace DriverService.Data
         Driver ViewWallet();
         Task<Driver> Approve(LockDriverInput input);
         Task<Driver> Lock(LockDriverInput input);
+        Task<Driver> SetLocation(Driver obj);
+        Task<Driver> GetById(string id);
     }
 }

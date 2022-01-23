@@ -57,7 +57,7 @@ namespace DriverService.Controllers
             {
                 var driver = _mapper.Map<Driver>(obj);
                 var result = await _driver.Registration(driver);
-                return Ok($"Regristrasi driver {driver.FullName} berhasil dan menunggu admin mengaktifkan akun anda");
+                return Ok($"Driver registration {driver.FullName} is successful and waiting for admin to activate your account");
             }
             catch (System.Exception ex)
             {
@@ -78,7 +78,9 @@ namespace DriverService.Controllers
         {
             try
             {
+
                 Console.WriteLine($"--> Getting Driver With Email/Username: {_driver.ViewProfile().Email}");
+
                 var driver = _driver.ViewProfile();
                 if (driver != null)
                 {
@@ -97,12 +99,30 @@ namespace DriverService.Controllers
         {
             try
             {
+                Console.WriteLine($"--> Getting Driver Wallet With Email/Username: {_driver.ViewProfile().Email}");
                 var driver = _driver.ViewWallet();
                 if (driver != null)
                 {
                     return Ok(_mapper.Map<WalletDriverDto>(driver));
                 }
                 return NotFound();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("SetLocation")]
+        public async Task<ActionResult<SetLocationDriverDto>> SetLocation(SetLocationDriverDto setLocation)
+        {
+            try
+            {
+                var driver = _mapper.Map<Driver>(setLocation);
+                var result = await _driver.SetLocation(driver);
+                var driverdto = _mapper.Map<SetLocationDriverDto>(result);
+                return Ok(driverdto);
+
             }
             catch (Exception ex)
             {

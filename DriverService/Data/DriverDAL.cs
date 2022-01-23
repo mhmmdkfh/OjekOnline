@@ -28,6 +28,20 @@ namespace DriverService.Data
             _httpContextAccessor = httpContextAccessor;
         }
 
+        public async Task<Driver> GetById(string id)
+        {
+            try
+            {
+                var result = await _db.Drivers.Where(d => d.Id == Convert.ToInt32(id)).SingleOrDefaultAsync<Driver>();
+                if (result == null) throw new Exception($"Data id {id} tidak ditemukan !");
+                return result;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                throw new Exception($"error: {dbEx.Message}");
+            }
+        }
+
         public async Task<DriverTokenDto> Login(string email, string password)
         {
             var driver = await _db.Drivers.Where(x => x.Email == email).FirstOrDefaultAsync();
@@ -35,8 +49,6 @@ namespace DriverService.Data
             {
                 var msg = new DriverTokenDto
                 {
-                    Token = null,
-                    Expired = null,
                     Message = "Username or password was invalid"
                 };
                 return msg;
@@ -44,12 +56,10 @@ namespace DriverService.Data
             bool valid = BCrypt.Net.BCrypt.Verify(password, driver.Password);
             if (valid)
             {
-                if (driver.IsAccepted == false)
+                if(driver.IsActive == false)
                 {
                     var result1 = new DriverTokenDto
                     {
-                        Token = null,
-                        Expired = null,
                         Message = "The account is not active, please contact the admin center"
                     };
                     return result1;
@@ -59,6 +69,7 @@ namespace DriverService.Data
 
                 var claims = new List<Claim>();
                 claims.Add(new Claim(ClaimTypes.Email, driver.Email));
+                claims.Add(new Claim("id", driver.Id.ToString()));
 
                 var expired = DateTime.Now.AddHours(3);
                 var jwtToken = new JwtSecurityToken(
@@ -78,8 +89,6 @@ namespace DriverService.Data
             }
             var msg1 = new DriverTokenDto
             {
-                Token = null,
-                Expired = null,
                 Message = "Username or password was invalid"
             };
             return msg1;
@@ -89,19 +98,19 @@ namespace DriverService.Data
         {
             try
             {
-                var drivers = await _db.Drivers.Where(d => d.NIK == obj.NIK).SingleOrDefaultAsync<Driver>();
+                var drivers = await _db.Drivers.Where(d => d.Email == obj.Email).SingleOrDefaultAsync<Driver>();
                 if (drivers != null)
                 {
                     throw new System.Exception("Driver all ready exist");
                 }
                 var newDriver = new Driver
                 {
-                    NIK = obj.NIK,
+                    Username = obj.Username,
                     FullName = obj.FullName,
                     Email = obj.Email,
                     Phone = obj.Phone,
                     Password = BCrypt.Net.BCrypt.HashPassword(obj.Password),
-                    IsAccepted = false
+                    IsActive = false
                 };
 
                 _db.Drivers.Add(newDriver);
@@ -120,6 +129,25 @@ namespace DriverService.Data
             return results;
         }
 
+        public async Task<Driver> SetLocation(Driver obj)
+        {
+            
+            try
+            {
+                var driverClaim = _httpContextAccessor.HttpContext.User.FindFirst("id").Value;
+                var result = await GetById(driverClaim);
+                result.Long = obj.Long;
+                result.Lat = obj.Lat;
+                await _db.SaveChangesAsync();
+                obj.Id = Convert.ToInt32(driverClaim);
+                return obj;
+            }
+            catch (Exception dbEx)
+            {
+                throw new Exception($"Error: {dbEx.Message}");
+            }
+        }
+        
         public Driver ViewProfile()
         {
             var driverEmail = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
@@ -154,6 +182,7 @@ namespace DriverService.Data
             await _db.SaveChangesAsync();
             return driver;
         }
+
 
         /*public async Task Delete(string id)
         {
