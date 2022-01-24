@@ -25,7 +25,7 @@ namespace AdminService.Synchronous.http
         {
             var httpContent = new StringContent(JsonSerializer.Serialize(input),
               Encoding.UTF8, "application/json");
-            var response = await _http.PutAsync(_config["CustomerService"] + "/lock", httpContent);
+            var response = await _http.PutAsync(_config["DriverService"] + "/lock", httpContent);
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("--> Sync PUT to CustomerService was OK !");
@@ -40,7 +40,7 @@ namespace AdminService.Synchronous.http
         {
             var httpContent = new StringContent(JsonSerializer.Serialize(input),
                 Encoding.UTF8, "application/json");
-            var response = await _http.PutAsync(_config["CustomerService"] + "/approve", httpContent);
+            var response = await _http.PutAsync(_config["DriverService"] + "/approve", httpContent);
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("--> Sync PUT to CustomerService was OK !");

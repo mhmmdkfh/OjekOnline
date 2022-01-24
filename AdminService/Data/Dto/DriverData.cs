@@ -8,6 +8,6 @@
         public float Wallet { get; set; }
         public string Phone { get; set; }
         public string Position { get; set; }
-        public bool IsAccepted { get; set; }
+        public bool IsActive { get; set; }
     }
 }

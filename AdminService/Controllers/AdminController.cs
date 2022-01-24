@@ -39,7 +39,7 @@ namespace AdminService.Controllers
             _httpAdmin = adminDataClient;
         }
 
-        // [AllowAnonymous]
+        [AllowAnonymous]
         [HttpPost("Register")]
         public async Task<ActionResult> Register([FromBody] CreateAdmin create)
         {
@@ -173,7 +173,7 @@ namespace AdminService.Controllers
         [HttpGet("Orders")]
         public async Task<ActionResult<IEnumerable<OrderData>>> GetTransaction()
         {
-            var response = _http.GetAsync(_config["CustomerService"] + "/orders").Result;
+            var response = _http.GetAsync(_config["OrderService"]).Result;
             if (response.IsSuccessStatusCode)
             {
                 Console.WriteLine("--> Sync Get to CustomerService was OK !");
