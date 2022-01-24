@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CustomerService.Data;
 using CustomerService.Helpers;
+using CustomerService.Synchronous;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

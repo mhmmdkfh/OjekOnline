@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CustomerService.Dtos;
 using CustomerService.Helpers;
 using CustomerService.Models;
+using CustomerService.Synchronous;
 using Geolocation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -117,7 +118,11 @@ namespace CustomerService.Data
         }
         public async Task<CheckOrderFeeResponse> CheckOrderFee(CheckOrderFeeRequest request)
         {
-            var rate = 10000;
+            var rateBody = await CustomerHttpClient.GetPrice(_appSettings, _httpContextAccessor.HttpContext.Request.Headers["Authorization"]);
+            // var rate = 10000;
+            dynamic data = Newtonsoft.Json.Linq.JObject.Parse(rateBody);
+            var rate = (double)data.travelFares;
+            Console.WriteLine(rate);
             double distance = GeoCalculator.GetDistance(request.FromLat, request.FromLong, request.ToLat, request.ToLong, 1);
             return new CheckOrderFeeResponse
             {

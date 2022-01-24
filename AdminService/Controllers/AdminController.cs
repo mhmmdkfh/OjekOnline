@@ -39,7 +39,7 @@ namespace AdminService.Controllers
             _httpAdmin = adminDataClient;
         }
 
-        [AllowAnonymous]
+        // [AllowAnonymous]
         [HttpPost("Register")]
         public async Task<ActionResult> Register([FromBody] CreateAdmin create)
         {
@@ -94,7 +94,7 @@ namespace AdminService.Controllers
 
         // PUT api/<AdminController>
         [HttpPost("Drivers")]
-        public async Task<ActionResult> ApproveDriver([FromBody]LockDriverInput input)
+        public async Task<ActionResult> ApproveDriver([FromBody] LockDriverInput input)
         {
             try
             {
@@ -149,7 +149,7 @@ namespace AdminService.Controllers
 
         // PUT api/<AdminController>/Users/3
         [HttpPost("lock/Users")]
-        public async Task<ActionResult> LockUser([FromBody]LockInput input)
+        public async Task<ActionResult> LockUser([FromBody] LockInput input)
         {
             try
             {
@@ -162,6 +162,7 @@ namespace AdminService.Controllers
             }
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<Rate> GetPrice()
         {
