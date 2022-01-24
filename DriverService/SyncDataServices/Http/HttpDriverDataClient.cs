@@ -26,7 +26,7 @@ namespace DriverService.SyncDataServices.Http
             var response = await _httpClient.PutAsync(_configuration["CustomerService"] + "/AcceptOrder",  httpContent);
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("--> Sync PUT to CustomerService was OK !");
+                Console.WriteLine("--> Sync PUT to CustomerService(Accepted Order From Driver) was OK !");
             }
             else
             {
@@ -34,14 +34,14 @@ namespace DriverService.SyncDataServices.Http
             };
         }
 
-        public async Task SendFinishOrder(FinishOrderInput input)
+        public async Task SendFinishOrder(FinishOrderDto input)
         {
             var httpContent = new StringContent(JsonSerializer.Serialize(input),
               Encoding.UTF8, "application/json");
             var response = await _httpClient.PutAsync(_configuration["CustomerService"] + "/FinishOrder", httpContent);
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("--> Sync PUT to CustomerService was OK !");
+                Console.WriteLine("--> Sync PUT to CustomerService(Finished Order By Driver) was OK !");
             }
             else
             {

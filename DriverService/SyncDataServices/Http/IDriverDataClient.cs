@@ -6,6 +6,6 @@ namespace DriverService.SyncDataServices.Http
     public interface IDriverDataClient
     {
         Task SendAcceptedOrder(AcceptOrderDto input);
-        Task SendFinishOrder(FinishOrderInput input);
+        Task SendFinishOrder(FinishOrderDto input);
     }
 }

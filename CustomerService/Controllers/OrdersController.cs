@@ -76,6 +76,7 @@ namespace CustomerService.Controllers
         public async Task<ActionResult<Order>> AccOrder([FromBody] AcceptOrderInput input)
         {
             var response = await _order.IsAcceptOrder(input);
+            Console.WriteLine("Success Accept Order");
             return Ok(response);
         }
 
@@ -86,7 +87,7 @@ namespace CustomerService.Controllers
             var response = await _order.IsFinishOrder(input);
             var wallet = _mapper.Map<Customer>(input);
             var result = await _customer.UpdateWalletCustomer(input.CustomerId, wallet);
-            Console.WriteLine($"{input.CustomerId}");
+            Console.WriteLine("Success Finish Order");
             return Ok(response);
             
         }

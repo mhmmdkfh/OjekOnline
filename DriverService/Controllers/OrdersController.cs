@@ -47,7 +47,7 @@ namespace DriverService.Controllers
             var response = _http.GetAsync(_configuration["CustomerService"]).Result;
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("--> Sync Get to CustomerService Was Ok");
+                Console.WriteLine("--> Sync Get to CustomerService(GetOrderFinished) Was Ok");
                 var customerJsonString = await response.Content.ReadAsStringAsync();
                 var deserialized = JsonSerializer.Deserialize<IEnumerable<OrderDto>>(customerJsonString,
                     new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
@@ -68,7 +68,7 @@ namespace DriverService.Controllers
             var response = _http.GetAsync(_configuration["CustomerService"] + $"/{Convert.ToInt32(driver)}").Result;
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("--> Sync Get to CustomerService Was Ok");
+                Console.WriteLine("--> Sync Get to CustomerService(GetOrderNotAcceptedOrderFalse) Was Ok");
                 var customerJsonString = await response.Content.ReadAsStringAsync();
                 var deserialized = JsonSerializer.Deserialize<IEnumerable<OrderDto>>(customerJsonString,
                     new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
@@ -89,7 +89,7 @@ namespace DriverService.Controllers
             var response = _http.GetAsync(_configuration["CustomerService"] + $"/Driverid?Driverid={Convert.ToInt32(driver)}").Result;
             if (response.IsSuccessStatusCode)
             {
-                Console.WriteLine("--> Sync Get to CustomerService Was Ok");
+                Console.WriteLine("--> Sync Get to CustomerService(GetAllOrderByDriver) Was Ok");
                 var customerJsonString = await response.Content.ReadAsStringAsync();
                 var deserialized = JsonSerializer.Deserialize<IEnumerable<OrderDto>>(customerJsonString,
                     new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
@@ -133,11 +133,13 @@ namespace DriverService.Controllers
             {
                 Id = input.Id,
                 DriverId = Convert.ToInt32(driver),
-                IsFinished = true
+                CustomerId = input.CustomerId,
+                Saldo = input.Saldo,
+                IsFinished = input.IsFinished
             };
             try
             {
-                await _driverDataClient.SendFinishOrder(input);
+                await _driverDataClient.SendFinishOrder(Finish);
                 var wallet = _mapper.Map<Driver>(input);
                 var result = await _driver.UpdateWalletDriver(wallet);
             }
