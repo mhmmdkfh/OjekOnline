@@ -1,5 +1,7 @@
+using DriverService.Controllers;
 using DriverService.Data;
 using DriverService.Helpers;
+using DriverService.SyncDataServices.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -37,6 +39,8 @@ namespace DriverService
             options.UseSqlServer(Configuration.GetConnectionString("MyDatabase")));
 
             services.AddScoped<IDriver, DriverDAL>();
+            services.AddHttpClient<OrdersController>();
+            services.AddHttpClient<IDriverDataClient, HttpDriverDataClient>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 

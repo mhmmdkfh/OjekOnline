@@ -15,6 +15,9 @@ namespace CustomerService.Data
         Task<TopUpResponse> TopUp(TopUpRequest request);
         Task<ViewSaldoResponse> ViewSaldo();
         Task<IEnumerable<Order>> ViewOrderHistory();
+        Task<Customer> UpdateWalletCustomer(string CustomerId, Customer obj);
         Task<Customer> LockUser(LockInput input);
+        Task<Customer> GetById(string id);
+
     }
 }

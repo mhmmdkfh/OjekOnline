@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
 using DriverService.Data;
 using DriverService.Dtos;
+using DriverService.Dtos.Order;
 using DriverService.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace DriverService.Controllers
@@ -23,6 +27,7 @@ namespace DriverService.Controllers
         {
             _mapper = mapper;
             _driver = driver;
+
         }
 
         [HttpGet]
@@ -32,7 +37,7 @@ namespace DriverService.Controllers
             return Ok(drivers);
         }
 
-        /*[HttpGet("{id}")]
+        [HttpGet("{id}")]
         public async Task<ActionResult<Driver>> Get(int id)
         {
             try
@@ -48,7 +53,7 @@ namespace DriverService.Controllers
 
                 return BadRequest(ex.Message);
             }
-        }*/
+        }
         [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<CreateDriverDto>> Registration(CreateDriverDto obj)

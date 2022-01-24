@@ -18,8 +18,8 @@ namespace DriverService.Data
             /*Console.WriteLine("--> Seeding data...");*/
             var drivers = new Driver[]
             {
-                new Driver{FullName = "Driver 1",Username="driver1" ,Email = "driver1@gmail.com", Wallet = 30000, Phone = "812332", Password = BCrypt.Net.BCrypt.HashPassword("Kosongkan@Saja"), IsActive = true},
-                new Driver{FullName = "Driver 2",Username="driver2" ,Email = "driver2@gmail.com", Wallet = 51000, Phone = "81239", Password = BCrypt.Net.BCrypt.HashPassword("Kosongkan@Saja"), IsActive = true}
+                new Driver{FullName = "Driver 1",Username="driver1" ,Email = "driver1@gmail.com", Saldo = 30000, Phone = "812332", Password = BCrypt.Net.BCrypt.HashPassword("Kosongkan@Saja"), IsActive = true},
+                new Driver{FullName = "Driver 2",Username="driver2" ,Email = "driver2@gmail.com", Saldo = 51000, Phone = "81239", Password = BCrypt.Net.BCrypt.HashPassword("Kosongkan@Saja"), IsActive = true}
             };
 
             foreach(var driver in drivers)

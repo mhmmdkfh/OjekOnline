@@ -181,5 +181,37 @@ namespace CustomerService.Data
             await _db.SaveChangesAsync();
             return customer;
         }
+
+        public async Task<Customer> GetById(string id)
+        {
+            try
+            {
+                var result = await _db.Customers.Where(d => d.Id == Convert.ToInt32(id)).SingleOrDefaultAsync<Customer>();
+                if (result == null) throw new Exception($"Data id {id} tidak ditemukan !");
+                return result;
+            }
+            catch (DbUpdateException dbEx)
+            {
+                throw new Exception($"error: {dbEx.Message}");
+            }
+        }
+
+        public async Task<Customer> UpdateWalletCustomer(string CustomerId, Customer obj)
+        {
+            try
+            {
+                var result = await GetById(CustomerId);
+                result.Username = result.Username;
+                result.Email = result.Email;
+                result.Saldo = result.Saldo - obj.Saldo;
+                await _db.SaveChangesAsync();
+                obj.Id = Convert.ToInt32(CustomerId);
+                return obj;
+            }
+            catch (Exception dbEx)
+            {
+                throw new Exception($"Error: {dbEx.Message}");
+            }
+        }
     }
 }

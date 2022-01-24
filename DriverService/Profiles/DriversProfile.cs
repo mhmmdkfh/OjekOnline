@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using DriverService.Dtos;
+using DriverService.Dtos.Order;
 using DriverService.Models;
 
 namespace DriverService.Profiles
@@ -15,6 +16,10 @@ namespace DriverService.Profiles
             CreateMap<Driver, WalletDriverDto>();
             CreateMap<Driver, SetLocationDriverDto>();
             CreateMap<SetLocationDriverDto, Driver>();
+            CreateMap<Driver, UpdateWalletDto>();
+            CreateMap<UpdateWalletDto, Driver>();
+            CreateMap<Driver, FinishOrderInput>();
+            CreateMap<FinishOrderInput, Driver>();
         }
     }
 }
