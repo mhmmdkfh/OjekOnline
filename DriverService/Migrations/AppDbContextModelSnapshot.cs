@@ -51,11 +51,11 @@ namespace DriverService.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
+                    b.Property<float>("Saldo")
+                        .HasColumnType("real");
+
                     b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Wallet")
-                        .HasColumnType("real");
 
                     b.HasKey("Id");
 

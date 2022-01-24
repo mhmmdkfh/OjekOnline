@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DriverService.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220123094436_InitialDb")]
+    [Migration("20220124104438_InitialDb")]
     partial class InitialDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -53,11 +53,11 @@ namespace DriverService.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("nvarchar(25)");
 
+                    b.Property<float>("Saldo")
+                        .HasColumnType("real");
+
                     b.Property<string>("Username")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Wallet")
-                        .HasColumnType("real");
 
                     b.HasKey("Id");
 

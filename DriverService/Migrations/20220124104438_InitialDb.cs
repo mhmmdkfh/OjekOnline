@@ -15,7 +15,7 @@ namespace DriverService.Migrations
                     Username = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     FullName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Wallet = table.Column<float>(type: "real", nullable: false),
+                    Saldo = table.Column<float>(type: "real", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),

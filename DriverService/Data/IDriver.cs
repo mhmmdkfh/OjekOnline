@@ -15,6 +15,7 @@ namespace DriverService.Data
         Task<Driver> Approve(LockDriverInput input);
         Task<Driver> Lock(LockDriverInput input);
         Task<Driver> SetLocation(Driver obj);
+        Task<Driver> UpdateWalletDriver(Driver obj);
         Task<Driver> GetById(string id);
     }
 }

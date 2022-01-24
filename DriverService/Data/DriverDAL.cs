@@ -56,7 +56,7 @@ namespace DriverService.Data
             bool valid = BCrypt.Net.BCrypt.Verify(password, driver.Password);
             if (valid)
             {
-                if(driver.IsActive == false)
+                if (driver.IsActive == false)
                 {
                     var result1 = new DriverTokenDto
                     {
@@ -131,7 +131,7 @@ namespace DriverService.Data
 
         public async Task<Driver> SetLocation(Driver obj)
         {
-            
+
             try
             {
                 var driverClaim = _httpContextAccessor.HttpContext.User.FindFirst("id").Value;
@@ -147,11 +147,11 @@ namespace DriverService.Data
                 throw new Exception($"Error: {dbEx.Message}");
             }
         }
-        
+
         public Driver ViewProfile()
         {
-            var driverEmail = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value;
-            return _db.Drivers.FirstOrDefault(d => d.Email == driverEmail);
+            var driverEmail = _httpContextAccessor.HttpContext.User.FindFirst("id").Value;
+            return _db.Drivers.FirstOrDefault(d => d.Id == Convert.ToInt32(driverEmail));
         }
 
         public Driver ViewWallet()
@@ -183,65 +183,23 @@ namespace DriverService.Data
             return driver;
         }
 
-
-        /*public async Task Delete(string id)
+        public async Task<Driver> UpdateWalletDriver(Driver obj)
         {
-            var result = await GetById(id);
-            if (result == null) throw new Exception("Data tidak ditemukan !");
             try
             {
-                _db.Drivers.Remove(result);
+                var driverClaim = _httpContextAccessor.HttpContext.User.FindFirst("id").Value;
+                var result = await GetById(driverClaim);
+                result.Username = result.Username;
+                result.Email = result.Email;
+                result.Saldo = result.Saldo + obj.Saldo;
                 await _db.SaveChangesAsync();
-            }
-            catch (DbUpdateException dbEx)
-            {
-                throw new Exception($"Error: {dbEx.Message}");
-            }
-        }
-
-        public async Task<IEnumerable<Driver>> GetAll()
-        {
-            var results = await (from d in _db.Drivers orderby d.FullName ascending select d).ToListAsync();
-            return results;
-        }
-
-        public async Task<Driver> GetById(string id)
-        {
-            try
-            {
-                var result = await _db.Drivers.Where(d => d.Id == Convert.ToInt32(id)).SingleOrDefaultAsync<Driver>();
-                if (result == null) throw new Exception($"Data id {id} tidak ditemukan !");
-                return result;
-            }
-            catch (DbUpdateException dbEx)
-            {
-                throw new Exception($"error: {dbEx.Message}");
-            }
-        }
-
-        public Task<IEnumerable<Driver>> GetByName(string name)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public async Task<Driver> Update(string id, Driver obj)
-        {
-            try
-            {
-                var result = await GetById(id);
-                result.NIK = obj.NIK;
-                result.FullName = obj.FullName;
-                result.Email = obj.Email;
-                result.Wallet = obj.Wallet;
-                result.Phone = obj.Phone;
-                await _db.SaveChangesAsync();
-                obj.Id = Convert.ToInt32(id);
+                obj.Id = Convert.ToInt32(driverClaim);
                 return obj;
             }
-            catch (DbUpdateException dbEx)
+            catch (Exception dbEx)
             {
                 throw new Exception($"Error: {dbEx.Message}");
             }
-        }*/
+        }
     }
 }

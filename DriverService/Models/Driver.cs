@@ -13,7 +13,7 @@ namespace DriverService.Models
         public string FullName { get; set; }
         [Required]
         public string Email { get; set; }
-        public float Wallet { get; set; }
+        public float Saldo { get; set; }
         [Required]
         [MaxLength(25)]
         public string Phone { get; set; }

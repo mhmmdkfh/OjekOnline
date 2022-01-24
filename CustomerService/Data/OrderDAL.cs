@@ -19,8 +19,8 @@ namespace CustomerService.Data
     public class OrderDAL : IOrder
     {
         private AppDbContext _db;
-        private AppSettings _appSettings;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        /*private AppSettings _appSettings;
+        private readonly IHttpContextAccessor _httpContextAccessor;*/
 
         public OrderDAL(AppDbContext db)
         {
@@ -41,6 +41,19 @@ namespace CustomerService.Data
             }
         }
 
+        public async Task<IEnumerable<Order>> GetOrdersNotAccept(int Driverid)
+        {
+            try
+            {
+                var found = await _db.Orders.Where(o => o.DriverId == Driverid && o.IsAccepted == false).ToListAsync();
+                return found;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<IEnumerable<Order>> GetByCustomer(int CustomerId)
         {
             try
@@ -53,6 +66,64 @@ namespace CustomerService.Data
                 throw new Exception($"Error: {ex.Message}");
             }
 
+        }
+
+        public async Task<IEnumerable<Order>> GetOrderById(int Driverid)
+        {
+            try
+            {
+                var found = await _db.Orders.Where(o => o.DriverId == Driverid).ToListAsync();
+                return found;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Error: {ex.Message}");
+            }
+            
+        }
+
+        public async Task<AcceptOrderRespon> IsAcceptOrder(AcceptOrderInput input)
+        {
+            var order = _db.Orders.Where(c => c.Id == input.Id && c.DriverId == input.DriverId).FirstOrDefault();
+            if(order == null)
+            {
+                var msg = new AcceptOrderRespon
+                {
+                    Message = "Order data could not be found"
+                };
+                return msg;
+            }
+            order.IsAccepted = input.IsAccepted;
+            _db.Orders.Update(order);
+            await _db.SaveChangesAsync();
+            var result = new AcceptOrderRespon
+            {
+                Message = "Driver has accepted the order"
+            };
+            return result;
+        }
+
+
+        public async Task<FinishOrderRespon> IsFinishOrder(FinishOrderInput input)
+        {
+            var order = _db.Orders.Where(c => c.Id == input.Id && c.DriverId == input.DriverId).FirstOrDefault();
+            if (order == null)
+            {
+                var msg = new FinishOrderRespon
+                {
+                    Message = "Order data could not be found"
+                };
+                return msg;
+            }
+            order.IsFinished = input.IsFinished;
+            _db.Orders.Update(order);
+            await _db.SaveChangesAsync();
+
+            var result = new FinishOrderRespon
+            {
+                Message = "Driver has finished the order"
+            };
+            return result;
         }
     }
 }
